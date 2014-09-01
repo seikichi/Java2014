@@ -1,4 +1,4 @@
-package ch01.ex01_01;
+package ch01.ex01_06;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -7,7 +7,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
-public class HelloWorldTest {
+public class FibonacciTest {
   private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
   @Before
@@ -21,8 +21,8 @@ public class HelloWorldTest {
   }
 
   @Test
-  public void helloWorldMain() {
-    HelloWorld.main(new String[0]);
-    assertThat(outputStream.toString(), is("Hello, world\n"));
+  public void fibonacciMain() {
+    Fibonacci.main(new String[0]);
+    assertThat(outputStream.toString(), startsWith(Fibonacci.TITLE));
   }
 }

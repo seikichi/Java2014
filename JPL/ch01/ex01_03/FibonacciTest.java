@@ -1,11 +1,9 @@
 package ch01.ex01_03;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
@@ -23,8 +21,8 @@ public class FibonacciTest {
   }
 
   @Test
-  public void testFibonacci() {
+  public void fibonacciMain() {
     Fibonacci.main(new String[0]);
-    assertThat(outputStream.toString(), startsWith("!!!! Fibonacci !!!!\n"));
+    assertThat(outputStream, hasToString(startsWith("!!!! Fibonacci !!!!\n")));
   }
 }

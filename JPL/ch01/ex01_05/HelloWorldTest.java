@@ -1,13 +1,11 @@
 package ch01.ex01_05;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 public class HelloWorldTest {
   private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -23,7 +21,7 @@ public class HelloWorldTest {
   }
 
   @Test
-  public void testHelloWorld() {
+  public void helloWorldMain() {
     HelloWorld.main(new String[0]);
     assertThat(outputStream.toString(), is(HelloWorld.MESSAGE + "\n"));
   }
