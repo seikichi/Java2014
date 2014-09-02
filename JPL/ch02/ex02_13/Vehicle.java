@@ -3,13 +3,14 @@ package ch02.ex02_13;
 import java.util.Arrays;
 
 public class Vehicle {
+  private static long nextID = 0;
+
   private final long id;
   private double speed;
   private double angle;
   private String ownerName;
 
-  private static long nextID = 0;
-  static long getMaximumID() { return nextID - 1; }
+  public static long getMaximumID() { return nextID - 1; }
 
   {
     this.id = nextID++;
@@ -26,9 +27,9 @@ public class Vehicle {
   public double getAngle() { return angle; }
   public String getOwnerName() { return ownerName; }
 
-  public void setSpeed(double newSpeed) { speed = newSpeed; }
-  public void setAngle(double newAngle) { angle = newAngle; }
-  public void setOwnerName(String newOwnerName) { ownerName = newOwnerName; }
+  public void setOwnerName(String newOwnerName) {
+    ownerName = newOwnerName;
+  }
 
   @Override
   public String toString() {
@@ -40,12 +41,7 @@ public class Vehicle {
 
   public static void main(String[] args) {
     Vehicle bycicle = new Vehicle("近藤誠一");
-    bycicle.setSpeed(1.0);
-    bycicle.setAngle(90.0);
-
     Vehicle car = new Vehicle("Seiichi KONDO");
-    car.setSpeed(100.0);
-    car.setAngle(30.0);
 
     for (Vehicle vehicle: Arrays.asList(bycicle, car)) {
       System.out.println(vehicle);

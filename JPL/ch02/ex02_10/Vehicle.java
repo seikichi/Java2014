@@ -1,15 +1,16 @@
-// package ch02.ex02_10;
+package ch02.ex02_10;
 
 import java.util.Arrays;
 
 public class Vehicle {
+  private static long nextID = 0;
+
   public final long id;
   public double speed;
   public double angle;
   public String ownerName;
 
-  private static long nextID = 0;
-  static long getMaximumID() { return nextID - 1; }
+  public static long getMaximumID() { return nextID - 1; }
 
   {
     this.id = nextID++;

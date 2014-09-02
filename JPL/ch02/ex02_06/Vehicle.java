@@ -3,12 +3,12 @@ package ch02.ex02_06;
 import java.util.Arrays;
 
 public class Vehicle {
+  public static long nextID = 0;
+
   public long id;
   public double speed;
   public double angle;
   public String ownerName;
-
-  public static long nextID = 0;
 
   public static void main(String[] args) {
     Vehicle bycicle = new Vehicle();
@@ -24,11 +24,10 @@ public class Vehicle {
     car.ownerName = "Seiichi KONDO";
 
     for (Vehicle vehicle: Arrays.asList(bycicle, car)) {
-      System.out.printf("Vehicle(id=%d, speed=%f, angle=%f, ownerName=%s)\n",
-                        vehicle.id,
-                        vehicle.speed,
-                        vehicle.angle,
-                        vehicle.ownerName);
+      System.out.println("Vehicle(id=" + vehicle.id +
+                         ", speed=" + vehicle.speed +
+                         ", angle=" + vehicle.angle +
+                         ", ownerName=" + vehicle.ownerName + ")");
     }
   }
 }

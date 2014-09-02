@@ -1,2 +1,2 @@
-- `Vehicle` クラスに必要性は無い-
- `LinkedList` には必要性がある
+- `Vehicle` クラスに必要性は無い
+- `LinkedList` には `LinkedList.fromElements(Object... elements)` のような，可変長引数を元にして `LinkedList` を作成する関数が存在していると利用者に使いやすいクラスになる．

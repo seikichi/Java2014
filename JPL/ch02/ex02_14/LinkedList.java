@@ -1,4 +1,4 @@
-// package ch02.ex02_14;
+package ch02.ex02_14;
 
 public class LinkedList {
   private Object element;
@@ -13,6 +13,9 @@ public class LinkedList {
     this(element);
     this.next = next;
   }
+
+  public Object getElement() { return element; }
+  public LinkedList getNext() { return next; }
 
   @Override
   public String toString() {
@@ -36,13 +39,7 @@ public class LinkedList {
 
   public static void main(String[] args) {
     Vehicle bycicle = new Vehicle("近藤誠一");
-    bycicle.setSpeed(1.0);
-    bycicle.setAngle(90);
-
     Vehicle car = new Vehicle("Seiichi KONDO");
-    car.setSpeed(100);
-    car.setAngle(30);
-
     LinkedList list = LinkedList.fromElements(bycicle, car);
     System.out.println(list);
   }

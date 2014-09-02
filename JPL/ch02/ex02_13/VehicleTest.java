@@ -1,4 +1,4 @@
-package ch02.ex02_09;
+package ch02.ex02_13;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -34,40 +34,50 @@ public class VehicleTest {
   }
 
   @Test
-  public void vehicleHasSpeed() {
-    vehicle.speed = 1.0;
-    assertThat(vehicle.speed, is(closeTo(1.0, EPS)));
+  public void getSpeed() {
+    assertThat(vehicle.getSpeed(), is(closeTo(0.0, EPS)));
   }
 
   @Test
-  public void vehicleHasAngle() {
-    vehicle.angle = 90.0;
-    assertThat(vehicle.angle, is(closeTo(90.0, EPS)));
+  public void getAngle() {
+    assertThat(vehicle.getAngle(), is(closeTo(0.0, EPS)));
   }
 
   @Test
   public void vehicleHasOwnerName() {
-    vehicle.ownerName = "seikichi";
-    assertThat(vehicle.ownerName, is("seikichi"));
+    vehicle.setOwnerName("seikichi");
+    assertThat(vehicle.getOwnerName(), is("seikichi"));
   }
 
   @Test
   public void eachVehicleHasUniqueId() {
-    assertThat(vehicle.id, is(not(equalTo(otherVehicle1.id))));
-    assertThat(vehicle.id, is(not(equalTo(otherVehicle2.id))));
-    assertThat(otherVehicle1.id, is(not(equalTo(otherVehicle2.id))));
+    assertThat(vehicle.getID(),
+               is(not(equalTo(otherVehicle1.getID()))));
+    assertThat(vehicle.getID(),
+               is(not(equalTo(otherVehicle2.getID()))));
+    assertThat(otherVehicle1.getID(),
+               is(not(equalTo(otherVehicle2.getID()))));
   }
 
   @Test
   public void vehicleCanBeCreatedWithOwnerName() {
-    assertThat(otherVehicle1.ownerName, is("Seiichi KONDO"));
+    assertThat(otherVehicle1.getOwnerName(), is("Seiichi KONDO"));
+  }
+
+  @Test
+  public void vehicleToString() {
+    vehicle.setOwnerName("kondo");
+    assertThat(vehicle, hasToString(startsWith("Vehicle(id=")));
+    assertThat(vehicle, hasToString(containsString("kondo")));
+    assertThat(vehicle, hasToString(containsString("0.0")));
+    assertThat(vehicle, hasToString(containsString("0")));
   }
 
   @Test
   public void getMaximumID() {
-    long maximumID = Math.max(vehicle.id,
-                              Math.max(otherVehicle1.id,
-                                       otherVehicle2.id));
+    long maximumID = Math.max(vehicle.getID(),
+                              Math.max(otherVehicle1.getID(),
+                                       otherVehicle2.getID()));
     assertThat(Vehicle.getMaximumID(), is(maximumID));
   }
 

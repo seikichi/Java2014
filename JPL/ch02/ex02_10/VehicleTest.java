@@ -1,4 +1,4 @@
-package ch02.ex02_09;
+package ch02.ex02_10;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -61,6 +61,17 @@ public class VehicleTest {
   @Test
   public void vehicleCanBeCreatedWithOwnerName() {
     assertThat(otherVehicle1.ownerName, is("Seiichi KONDO"));
+  }
+
+  @Test
+  public void vehicleToString() {
+    vehicle.speed = 1.0;
+    vehicle.angle = 42;
+    vehicle.ownerName = "kondo";
+    assertThat(vehicle, hasToString(startsWith("Vehicle(id=")));
+    assertThat(vehicle, hasToString(containsString("kondo")));
+    assertThat(vehicle, hasToString(containsString("1.0")));
+    assertThat(vehicle, hasToString(containsString("42")));
   }
 
   @Test

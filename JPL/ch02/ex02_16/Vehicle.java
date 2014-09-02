@@ -1,4 +1,4 @@
-// package ch02.ex02_16;
+package ch02.ex02_16;
 
 import java.util.Arrays;
 

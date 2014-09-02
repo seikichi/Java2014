@@ -1,4 +1,4 @@
-// package ch02.ex02_12;
+package ch02.ex02_12;
 
 public class LinkedList {
   Object element;

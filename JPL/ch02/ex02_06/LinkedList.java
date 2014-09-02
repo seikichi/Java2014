@@ -26,12 +26,11 @@ public class LinkedList {
 
     LinkedList iter = first;
     while (iter != null) {
-      Vehicle vehicle = (Vehicle)iter.element;
-      System.out.printf("Vehicle(id=%d, speed=%f, angle=%f, ownerName=%s)\n",
-                        vehicle.id,
-                        vehicle.speed,
-                        vehicle.angle,
-                        vehicle.ownerName);
+      Vehicle vehicle = (Vehicle)iter.element; 
+      System.out.println("Vehicle(id=" + vehicle.id +
+                         ", speed=" + vehicle.speed +
+                         ", angle=" + vehicle.angle +
+                         ", ownerName=" + vehicle.ownerName + ")");
       iter = iter.next;
     }
   }

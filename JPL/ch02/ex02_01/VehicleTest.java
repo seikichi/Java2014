@@ -1,12 +1,13 @@
 package ch02.ex02_01;
 
-import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
+import org.junit.*;
+
 public class VehicleTest {
+  private static final double EPS = 1e-10;
   private Vehicle vehicle;
-  private static double EPS = 1e-10;
 
   @Before
   public void prepareVehicle() {

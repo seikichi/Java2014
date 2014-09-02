@@ -1,16 +1,32 @@
 package ch02.ex02_07;
 
-import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
+import org.junit.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 public class VehicleTest {
+  private static final double EPS = 1e-10;
+
   private Vehicle vehicle;
-  private static double EPS = 1e-10;
+  private ByteArrayOutputStream outputStream;
 
   @Before
   public void prepareVehicle() {
     vehicle = new Vehicle();
+  }
+
+  @Before
+  public void setUpStreams() {
+    outputStream = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(outputStream));
+  }
+
+  @After
+  public void cleanUpStreams() {
+    System.setOut(null);
   }
 
   @Test
@@ -51,5 +67,17 @@ public class VehicleTest {
     String ownerName = "Seiichi KONDO";
     Vehicle v = new Vehicle(ownerName);
     assertThat(v.ownerName, is(ownerName));
+  }
+
+  @Test
+  public void vehicleMainOutputsFormattedVehicles() {
+    Vehicle.main(new String[0]);
+    String[] outputLines = outputStream.toString()
+      .split(System.getProperty("line.separator"));
+
+    assertThat(outputLines.length, greaterThan(1));
+    for (String line: outputLines) {
+      assertThat(line, startsWith("Vehicle(id="));
+    }
   }
 }
