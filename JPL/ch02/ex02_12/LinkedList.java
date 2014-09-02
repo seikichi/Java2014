@@ -1,4 +1,4 @@
-// package ch02.ex02_11;
+// package ch02.ex02_12;
 
 public class LinkedList {
   Object element;
@@ -20,6 +20,20 @@ public class LinkedList {
       ", next=" + (next != null ? next.toString() : "null") + ")";
   }
 
+  static LinkedList fromElements(Object... elements) {
+    LinkedList prev = null, first = null;
+    for (Object element: elements) {
+      LinkedList list = new LinkedList(element);
+      if (prev == null) {
+        first = list;
+      } else {
+        prev.next = list;
+      }
+      prev = list;
+    }
+    return first;
+  }
+
   public static void main(String[] args) {
     Vehicle bycicle = new Vehicle("近藤誠一");
     bycicle.speed = 1.0;
@@ -29,9 +43,7 @@ public class LinkedList {
     car.speed = 100;
     car.angle = 30;
 
-    LinkedList second = new LinkedList(car);
-    LinkedList first = new LinkedList(bycicle, second);
-
-    System.out.println(first);
+    LinkedList list = LinkedList.fromElements(bycicle, car);
+    System.out.println(list);
   }
 }
