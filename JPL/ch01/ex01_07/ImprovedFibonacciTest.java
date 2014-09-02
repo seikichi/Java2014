@@ -1,4 +1,4 @@
-package ch01.ex01_04;
+package ch01.ex01_07;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -7,7 +7,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
-public class SquareRootOfTwoTest {
+public class ImprovedFibonacciTest {
   private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
   @Before
@@ -21,10 +21,12 @@ public class SquareRootOfTwoTest {
   }
 
   @Test
-  public void squareRootOfTwoMain() {
-    SquareRootOfTwo.main(new String[0]);
-    final String outputWithoutNewLines = outputStream
-      .toString().replace(System.getProperty("line.separator"), "");
-    assertThat(outputWithoutNewLines, startsWith("141421356"));
+  public void improvedFibonacciMain() {
+    ImprovedFibonacci.main(new String[0]);
+    String[] lines = outputStream.toString()
+      .split(System.getProperty("line.separator"));
+    for (int i = 0; i < lines.length; ++i) {
+      assertThat(lines[i], startsWith((i + 1) + ": "));
+    }
   }
 }

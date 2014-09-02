@@ -8,14 +8,14 @@ class ImprovedFibonacci {
     int hi = 1;
     String mark;
 
-    System.out.println(MAX_INDEX + ": " + lo);
-    for (int i = 2; i <= MAX_INDEX; i++) {
+    System.out.println("1: " + lo);
+    for (int i = MAX_INDEX; i >= 2; i--) {
       if (hi % 2 == 0) {
         mark = " *";
       } else {
         mark = "";
       }
-      System.out.println((MAX_INDEX - i + 1) + ": " + hi + mark);
+      System.out.println((MAX_INDEX - i + 2) + ": " + hi + mark);
       hi = lo + hi;
       lo = hi - lo;
     }
