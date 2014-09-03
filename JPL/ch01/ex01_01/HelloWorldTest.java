@@ -1,17 +1,18 @@
 package ch01.ex01_01;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
-import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
+import org.junit.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 public class HelloWorldTest {
-  private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+  private ByteArrayOutputStream outputStream;
 
   @Before
   public void setUpStreams() {
+    outputStream = new ByteArrayOutputStream();
     System.setOut(new PrintStream(outputStream));
   }
 
@@ -23,6 +24,8 @@ public class HelloWorldTest {
   @Test
   public void helloWorldMain() {
     HelloWorld.main(new String[0]);
-    assertThat(outputStream.toString(), is("Hello, world\n"));
+
+    final String outputLower = outputStream.toString().toLowerCase();
+    assertThat(outputLower, allOf(containsString("hello"), containsString("world")));
   }
 }

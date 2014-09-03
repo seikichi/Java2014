@@ -1,7 +1,7 @@
 package ch01.ex01_06;
 
 class Fibonacci {
-  public static final String TITLE = "!!!!! Fibonacci !!!!!";
+  private static final String TITLE = "!!!!! Fibonacci !!!!!";
 
   public static void main(String[] args) {
     System.out.println(TITLE);

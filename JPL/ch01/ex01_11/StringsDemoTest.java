@@ -1,4 +1,4 @@
-package ch01.ex01_05;
+package ch01.ex01_11;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -7,7 +7,7 @@ import org.junit.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-public class HelloWorldTest {
+public class StringsDemoTest {
   private ByteArrayOutputStream outputStream;
 
   @Before
@@ -22,10 +22,11 @@ public class HelloWorldTest {
   }
 
   @Test
-  public void helloWorldMain() {
-    HelloWorld.main(new String[0]);
-
-    final String outputLower = outputStream.toString().toLowerCase();
-    assertThat(outputLower, allOf(containsString("hello"), containsString("world")));
+  public void stringsDemoMain() {
+    StringsDemo.main(new String[0]);
+    final String output = outputStream.toString();
+    assertThat(output, allOf(containsString("近藤"),
+                             containsString("誠一"),
+                             containsString("WS開本")));
   }
 }

@@ -1,17 +1,18 @@
 package ch01.ex01_06;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
-import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
+import org.junit.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 public class FibonacciTest {
-  private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+  private ByteArrayOutputStream outputStream;
 
   @Before
   public void setUpStreams() {
+    outputStream = new ByteArrayOutputStream();
     System.setOut(new PrintStream(outputStream));
   }
 
@@ -23,6 +24,6 @@ public class FibonacciTest {
   @Test
   public void fibonacciMain() {
     Fibonacci.main(new String[0]);
-    assertThat(outputStream.toString(), startsWith(Fibonacci.TITLE));
+    assertThat(outputStream, hasToString(startsWith("!!!!! Fibonacci !!!!!")));
   }
 }

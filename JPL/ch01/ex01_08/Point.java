@@ -1,7 +1,7 @@
 package ch01.ex01_08;
 
 public class Point {
-  public static Point origin = new Point();
+  public static final Point origin = new Point();
 
   public double x, y;
 

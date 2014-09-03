@@ -1,9 +1,9 @@
 package ch01.ex01_16;
 
-import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
+import org.junit.*;
 import java.io.IOException;
 
 public class MyUtilitiesTest {

@@ -8,10 +8,11 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 public class FibonacciTest {
-  private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+  private ByteArrayOutputStream outputStream;
 
   @Before
   public void setUpStreams() {
+    outputStream = new ByteArrayOutputStream();
     System.setOut(new PrintStream(outputStream));
   }
 
