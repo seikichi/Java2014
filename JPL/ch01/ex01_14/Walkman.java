@@ -4,27 +4,37 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Walkman との接続をモデル化したインタフェース
+ * ConnectionInterface は Walkman との接続をモデル化したインタフェース
  */
 interface ConnectionInterface {
+  /** 
+   * close は Walkman との接続を閉じる
+   */
   void close();
+
+  /** 
+   * listen は Walkman から次に再生する音声を取得する
+   */
   Sound listen();
 }
 
 /**
- * 音声を受信するだけでなく送信可能な接続をモデル化したインタフェース
+ * ChattableConnectionInterface は音声を受信するだけでなく送信可能な接続をモデル化したインタフェース
  */
 interface ChattableConnectionInterface extends ConnectionInterface {
+  /** 
+   * speak は他のコネクションに音声を送信する
+   */
   void speak(Sound sound);
 }
 
 /**
- * Walkman から Connection に送られる音声をモデル化したクラス
+ * Sound は Walkman から Connection に送られる音声をモデル化したクラス
  */
 class Sound {
-  private final String content;
   @Override public String toString() { return content; }
   Sound(final String content) { this.content = content; }
+  private final String content;
 }
 
 /**
@@ -59,7 +69,8 @@ class ChattableConnection implements ChattableConnectionInterface {
  */
 class Walkman {
   /**
-   * 音楽の再生を開始する (同時に1コネクションしか存在できない)
+   * 音楽の再生を開始する (同時に1コネクションしか存在できないことに注意)
+   * @return Walkman との接続を作成する。作成に失敗した場合は null を返す。
    */
   public ConnectionInterface play() {
     if (currentConnection != null) { return null; }
@@ -119,6 +130,7 @@ class Walkman {
 class DualTerminalWalkman extends Walkman {
   /**
    * 音楽の再生を開始する (同時に2コネクション存在できる)
+   * @return Walkman との接続を作成する。作成に失敗した場合は null を返す。
    */
   @Override public ConnectionInterface play() {
     ConnectionInterface conn = super.play();
