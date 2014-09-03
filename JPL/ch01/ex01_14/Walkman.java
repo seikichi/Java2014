@@ -1,4 +1,4 @@
-// package ch01.ex01_14;
+package ch01.ex01_14;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -97,21 +97,9 @@ class Walkman {
   }
 
   private ConnectionInterface currentConnection = null;
-  private Queue<Sound> soundQueue = new LinkedList();
+  private Queue<Sound> soundQueue = new LinkedList<Sound>();
 
   public static void main(String[] args) {
-    // Walkman walkman = new Walkman();
-    // Connection conn = walkman.play();
-    // walkman.enqueueSound(new Sound("Hello, world!"));
-    // System.out.println(conn.listen());
-
-    // Walkman walkman = new DualTerminalWalkman();
-    // Connection conn1 = walkman.play();
-    // Connection conn2 = walkman.play();
-    // walkman.enqueueSound(new Sound("Hello, world!"));
-    // System.out.println(conn1.listen());
-    // System.out.println(conn2.listen());
-
     ChattableWalkman walkman = new ChattableWalkman();
     ConnectionInterface conn1 = walkman.play();
     ChattableConnectionInterface conn2 = walkman.play();
@@ -156,7 +144,7 @@ class DualTerminalWalkman extends Walkman {
   }
 
   private ConnectionInterface additionalConnection = null;
-  private Queue<Sound> additionalSoundQueue = new LinkedList();
+  private Queue<Sound> additionalSoundQueue = new LinkedList<Sound>();
 }
 
 /**

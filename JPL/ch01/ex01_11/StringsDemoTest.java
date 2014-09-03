@@ -25,7 +25,7 @@ public class StringsDemoTest {
   public void stringsDemoMain() {
     StringsDemo.main(new String[0]);
     final String output = outputStream.toString();
-    assertThat(output, allOf(containsString("Kondo"),
+    assertThat(output, allOf(containsString("KONDO"),
                              containsString("Seiichi"),
                              containsString("Ricoh")));
   }
