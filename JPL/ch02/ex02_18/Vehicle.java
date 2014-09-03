@@ -57,7 +57,7 @@ public class Vehicle {
 
   public static void main(String[] args) {
     if (args.length != 1) {
-      System.err.println("Usage: java Vehicle <owner-name>");
+      System.err.println("Usage: java Vehicle OWNER_NAME");
       return;
     }
     final String ownerName = args[0];

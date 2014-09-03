@@ -25,8 +25,8 @@ public class StringsDemoTest {
   public void stringsDemoMain() {
     StringsDemo.main(new String[0]);
     final String output = outputStream.toString();
-    assertThat(output, allOf(containsString("近藤"),
-                             containsString("誠一"),
-                             containsString("WS開本")));
+    assertThat(output, allOf(containsString("Kondo"),
+                             containsString("Seiichi"),
+                             containsString("Ricoh")));
   }
 }

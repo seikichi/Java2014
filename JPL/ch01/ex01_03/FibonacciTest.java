@@ -24,6 +24,6 @@ public class FibonacciTest {
   @Test
   public void fibonacciMain() {
     Fibonacci.main(new String[0]);
-    assertThat(outputStream, hasToString(startsWith("!!!! Fibonacci !!!!\n")));
+    assertThat(outputStream, hasToString(startsWith("!!!! Fibonacci !!!!")));
   }
 }
