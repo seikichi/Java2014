@@ -1,7 +1,5 @@
 package ch02.ex02_18;
 
-import java.util.Arrays;
-
 public class Vehicle {
   private static long nextID = 0;
 

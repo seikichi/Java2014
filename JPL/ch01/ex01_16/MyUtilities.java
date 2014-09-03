@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.FileInputStream;
 
 class BadDataSetException extends Exception {
+  private static final long serialVersionUID = 1L;
   private final String fileName;
   private final IOException ioException;
 
