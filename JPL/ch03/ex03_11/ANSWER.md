@@ -1,0 +1,3 @@
+- メトリクスをオーバーフローさせる
+- reflection を利用して private 書き換え
+- doSort の中で「もう1度」sort を呼ぶ
