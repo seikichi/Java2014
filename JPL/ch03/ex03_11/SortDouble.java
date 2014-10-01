@@ -1,4 +1,4 @@
-// package ch03.ex03_11;
+package ch03.ex03_11;
 
 abstract class SortDouble {
   private double[] values;

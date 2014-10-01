@@ -3,7 +3,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -11,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 public final class DigitalClock extends Frame implements Runnable {
+  private static final long serialVersionUID = 1L;
+
   private static int Width = 600;
   private static int Height = 128;
   private static int FontSize = 48;
