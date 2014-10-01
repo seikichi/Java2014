@@ -1,4 +1,4 @@
-package ch03.ex03_02;
+package ch03.ex03_03;
 
 public class X {
   {

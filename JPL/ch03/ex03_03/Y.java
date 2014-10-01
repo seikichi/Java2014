@@ -1,4 +1,4 @@
-package ch03.ex03_02;
+package ch03.ex03_03;
 
 public class Y extends X {
   {
@@ -26,6 +26,6 @@ public class Y extends X {
   }
 
   public static void main(String[] args) {
-    Y y = new Y();
+    new Y();
   }
 }
