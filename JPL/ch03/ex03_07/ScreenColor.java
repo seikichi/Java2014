@@ -16,10 +16,8 @@ public class ScreenColor {
 
   @Override
   public boolean equals(Object obj) {
-    if (color == null) {
-      return obj == null;
-    } else if (obj instanceof ScreenColor) {
-      ScreenColor rhs = (ScreenColor)obj;
+    if (obj instanceof ScreenColor) {
+      ScreenColor rhs = (ScreenColor) obj;
       return color.equals(rhs.color);
     }
     return false;

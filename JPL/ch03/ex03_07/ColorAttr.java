@@ -26,7 +26,7 @@ public class ColorAttr extends Attr {
   }
 
   public int hashCode() {
-    return this.getName().hashCode() ^ this.getColor().hashCode();
+    return (this.getName().hashCode() ^ this.getColor().hashCode());
   }
 
   @Override

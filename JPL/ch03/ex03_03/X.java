@@ -6,28 +6,26 @@ public class X {
   }
 
   protected int xMask = 0x00ff;
-  protected int fullMask;
 
   {
     printMask("Xのフィールドが初期化された");
   }
 
   public X() {
-    initializeFullMask();
     printMask("Xのコンストラクタが実行された");
 
     System.out.printf("mask(0xffff) returns 0x%04x in X() %n", mask(0xffff));
   }
 
-  protected void initializeFullMask() {
-    this.fullMask = xMask;
+  protected int fullMask() {
+    return xMask;
   }
 
-  public int mask(int orig) {
-    return (orig & fullMask);
+  public final int mask(int orig) {
+    return (orig & fullMask());
   }
 
   public void printMask(final String info) {
-    System.out.printf("0x%04x 0x%04x (%s)%n", xMask, fullMask, info);
+    System.out.printf("0x%04x 0x%04x (%s)%n", xMask, fullMask(), info);
   }
 }

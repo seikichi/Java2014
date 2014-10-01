@@ -1,6 +1,6 @@
 package ch03.ex03_10;
 
-public class LinkedList implements Cloneable {
+public final class LinkedList implements Cloneable {
   private Object element;
   private LinkedList next;
 
