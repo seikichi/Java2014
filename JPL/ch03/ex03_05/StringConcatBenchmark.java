@@ -4,7 +4,7 @@ public class StringConcatBenchmark extends Benchmark {
   private String string = "";
 
   void benchmark() {
-    this.string += "a";
+    string = string + "a";
   }
 
   public static void main(String[] args) {
