@@ -4,13 +4,24 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 public class XTest {
   private X x;
 
+  private ByteArrayOutputStream outputStream;
+
   @Before
-  public void prepareX() {
+  public void setUpStreams() {
+    outputStream = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(outputStream));
     x = new X();
+  }
+
+  @After
+  public void cleanUpStreams() {
+    System.setOut(null);
   }
 
   @Test
