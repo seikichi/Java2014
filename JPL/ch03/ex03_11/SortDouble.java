@@ -1,12 +1,15 @@
-package ch03.ex03_11;
+// package ch03.ex03_11;
 
 abstract class SortDouble {
   private double[] values;
-  private final SortMetrics curMetrics = new SortMetrics();
+  private SortMetrics curMetrics;
 
   public final SortMetrics sort(double[] data) {
     values = data;
-    curMetrics.init();
+    if (curMetrics == null) {
+      curMetrics = new SortMetrics();
+      curMetrics.init();
+    }
     doSort();
     return getMetrics();
   }

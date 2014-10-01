@@ -8,6 +8,9 @@ public final class BankAccount {
   private long balance;
   private Queue<Action> actions;
 
+  public long getNumber() { return number; }
+  public long getBalance() { return balance; }
+
   public static class Action {
     private final String action;
     private final long amount;
@@ -59,11 +62,12 @@ public final class BankAccount {
   }
 
   public History history() {
-    return new History((Action[]) actions.toArray());
+    return new History(actions.toArray(new Action[actions.size()]));
   }
 
   public BankAccount(long number) {
     this.number = number;
+    this.balance = 0;
     this.actions = new LinkedList<Action>();
   }
 
@@ -72,4 +76,3 @@ public final class BankAccount {
     this.balance = balance;
   }
 }
-

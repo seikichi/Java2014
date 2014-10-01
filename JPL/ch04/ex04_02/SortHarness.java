@@ -1,4 +1,4 @@
-package ch03.ex03_12;
+package ch04.ex04_02;
 
 abstract class SortHarness<T extends Comparable<T>> {
   private T[] values;

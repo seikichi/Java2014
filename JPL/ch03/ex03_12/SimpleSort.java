@@ -1,6 +1,6 @@
 package ch03.ex03_12;
 
-public class SimpleSort extends SortHarness {
+public class SimpleSort extends SortHarness<String> {
   protected void doSort() {
     for (int i = 0; i < getDataLength(); i++) {
       for (int j = i + 1; j < getDataLength(); j++) {
@@ -11,7 +11,8 @@ public class SimpleSort extends SortHarness {
 
   public static void main(String[] args) {
     String[] testData = {"0.3", "1.3e-2", "7.9", "3.17"};
-    SortHarness bsort = new SimpleSort();
+
+    SortHarness<String> bsort = new SimpleSort();
     SortMetrics metrics = bsort.sort(testData);
     System.out.println("Metrics:" + metrics);
     for (int i = 0; i < testData.length; i++) {

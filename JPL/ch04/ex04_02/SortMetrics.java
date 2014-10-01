@@ -1,4 +1,4 @@
-// package ch03.ex03_11;
+package ch04.ex04_02;
 
 final class SortMetrics implements Cloneable {
   public long probeCnt, compareCnt, swapCnt;
