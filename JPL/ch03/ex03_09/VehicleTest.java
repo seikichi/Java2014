@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.*;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 public class VehicleTest {
   private static final double EPS = 1e-10;

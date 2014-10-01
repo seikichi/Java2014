@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.*;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 public class LinkedListTest {
   class TestData {
@@ -19,7 +17,6 @@ public class LinkedListTest {
   private LinkedList linkedListWidthTestData;
 
   private TestData data1, data2, data3;
-
 
   @Before
   public void prepareLinkedLists() {
