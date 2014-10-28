@@ -3,34 +3,49 @@ import java.util.HashMap;
 import java.awt.*;
 import java.awt.event.*;
 
-public final class PropertiesDialog extends Dialog implements ActionListener {
-  private final Config config;
+public final class PropertiesDialog extends Dialog {
+  private static final long serialVersionUID = 2L;
 
-  PropertiesDialog(Frame owner, Config config) {
+  private final static int Width = 512;
+  private final static int Height = 256;
+  private final DigitalClockModel model;
+
+  PropertiesDialog(Frame owner, DigitalClockModel model) {
     super(owner);
-    this.config = config;
+    this.model = model;
 
     setTitle("Properties");
-    setSize(512, 512);
+    setSize(Width, Height);
     setVisible(true);
     setResizable(false);
     setVisible(true);
 
-    setLayout(new GridLayout(10, 1));
+    setLayout(new GridLayout(9, 1));
+    addFontChoice();
+    addFontSizeChoice();
+    addFontColorChoice();
+    addBackgroundColorChoice();
+    addOkButton();
 
+    addWindowListener(WindowAdapterFactory.closing(e -> dispose()));
+  }
+
+  private void addFontChoice() {
     Choice fontChoice = new Choice();
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    Font fonts[] = ge.getAllFonts();
-    for (Font font : fonts) {
+    for (Font font : model.getAllFonts()) {
       fontChoice.add(font.getName());
     }
-    fontChoice.select(config.getFontName());
+    fontChoice.select(model.getFontName());
     fontChoice.addItemListener(e -> {
         Choice c = (Choice) e.getItemSelectable();
-        config.setFontName(c.getSelectedItem());
+        model.setFontName(c.getSelectedItem());
     });
+    add(new Label("Font"));
     add(fontChoice);
+  }
 
+  private void addFontSizeChoice() {
     Choice fontSizeChoice = new Choice();
     int[] fontSizes = {
       8, 9, 10, 11, 12,
@@ -42,56 +57,48 @@ public final class PropertiesDialog extends Dialog implements ActionListener {
     for (int size : fontSizes) {
       fontSizeChoice.add(String.valueOf(size));
     }
-    fontSizeChoice.select(String.valueOf(config.getFontSize()));
+    fontSizeChoice.select(String.valueOf(model.getFontSize()));
     fontSizeChoice.addItemListener(e -> {
         Choice c = (Choice) e.getItemSelectable();
-        config.setFontSize(Integer.parseInt(c.getSelectedItem()));
+        model.setFontSize(Integer.parseInt(c.getSelectedItem()));
     });
+    add(new Label("Font Size"));
     add(fontSizeChoice);
+  }
 
-    HashMap<String, Color> colors = new HashMap<String, Color>();
-    colors.put("BLACK", Color.BLACK);
-    colors.put("BLUE", Color.BLUE);
-    colors.put("CYAN", Color.CYAN);
-    colors.put("GRAY", Color.DARK_GRAY);
-    colors.put("GRAY", Color.GRAY);
-    colors.put("GREEN", Color.GREEN);
-    colors.put("GRAY", Color.LIGHT_GRAY);
-    colors.put("MAGENTA", Color.MAGENTA);
-    colors.put("ORANGE", Color.ORANGE);
-    colors.put("PINK", Color.PINK);
-    colors.put("RED", Color.RED);
-    colors.put("YELLOW", Color.YELLOW);
-
+  private void addFontColorChoice() {
+    HashMap<String, Color> colors = model.getColorHash();
     Choice fontColorChoice = new Choice();
     for (String colorName : colors.keySet()) {
       fontColorChoice.add(colorName);
     }
     fontColorChoice.addItemListener(e -> {
         Choice c = (Choice) e.getItemSelectable();
-        config.setFontColor(colors.get(c.getSelectedItem()));
+        model.setFontColor(colors.get(c.getSelectedItem()));
     });
+    fontColorChoice.select(model.getColorName(model.getFontColor()));
+    add(new Label("Font Color"));
     add(fontColorChoice);
+  }
 
+  private void addBackgroundColorChoice() {
+    HashMap<String, Color> colors = model.getColorHash();
     Choice backgroundColorChoice = new Choice();
     for (String colorName : colors.keySet()) {
       backgroundColorChoice.add(colorName);
     }
     backgroundColorChoice.addItemListener(e -> {
         Choice c = (Choice) e.getItemSelectable();
-        config.setBackgroundColor(colors.get(c.getSelectedItem()));
+        model.setBackgroundColor(colors.get(c.getSelectedItem()));
     });
+    backgroundColorChoice.select(model.getColorName(model.getBackgroundColor()));
+    add(new Label("Background Color"));
     add(backgroundColorChoice);
-
-    Button okButton = new Button("OK");
-    okButton.addActionListener(this);
-    okButton.addActionListener(e -> { System.exit(0); });
-    add(okButton);
-
-    addWindowListener(WindowAdapterFactory.closing(e -> System.exit(0)));
   }
 
-  public void actionPerformed(ActionEvent e) {
-    System.exit(0);
+  private void addOkButton() {
+    Button okButton = new Button("OK");
+    okButton.addActionListener(e -> dispose());
+    add(okButton);
   }
 }
