@@ -19,6 +19,11 @@ final class Config extends Observable {
     return new Font(this.getFontName(), Font.PLAIN, this.getFontSize());
   }
 
+  public void notifyObservers() {
+    setChanged();
+    notifyObservers(this);
+  }
+
   public int getFontSize() { return fontSize; }
   public String getFontName() { return fontName; }
   public Color getFontColor() { return fontColor; }
@@ -39,10 +44,5 @@ final class Config extends Observable {
   public void setBackgroundColor(Color newBackgroundColor) {
     backgroundColor = newBackgroundColor;
     notifyObservers();
-  }
-
-  public void notifyObservers() {
-    setChanged();
-    notifyObservers(this);
   }
 }

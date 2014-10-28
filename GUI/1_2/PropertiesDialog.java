@@ -88,11 +88,7 @@ public final class PropertiesDialog extends Dialog implements ActionListener {
     okButton.addActionListener(e -> { System.exit(0); });
     add(okButton);
 
-    addWindowListener(new WindowAdapter() {
-        @Override public void windowClosing(WindowEvent event) {
-          System.exit(0);
-        }
-    });
+    addWindowListener(WindowAdapterFactory.closing(e -> System.exit(0)));
   }
 
   public void actionPerformed(ActionEvent e) {

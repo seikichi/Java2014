@@ -4,6 +4,7 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
@@ -14,6 +15,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.font.TextLayout;
+import java.awt.geom.Rectangle2D;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Observable;
@@ -25,11 +28,7 @@ public final class DigitalClock extends Frame implements Runnable, Observer {
 
   private static int Width = 600;
   private static int Height = 128;
-  private static int FontX = 32;
-  private static int FontY = 96;
-  // private static int FontSize = 48;
   private static String timeFormat = "yyyy/MM/dd HH:mm:ss";
-
   private final Config config;
 
   public DigitalClock() {
@@ -37,15 +36,10 @@ public final class DigitalClock extends Frame implements Runnable, Observer {
     config.addObserver(this);
 
     setResizable(false);
-    setSize(Width, Height);
     setTitle("Digital Clock");
     setVisible(true);
     setFont(config.getFont());
-    addWindowListener(new WindowAdapter() {
-        @Override public void windowClosing(WindowEvent event) {
-          System.exit(0);
-        }
-    });
+    addWindowListener(WindowAdapterFactory.closing(e -> System.exit(0)));
 
     // Menu (TODO)
     Frame self = this;
@@ -62,19 +56,26 @@ public final class DigitalClock extends Frame implements Runnable, Observer {
     MenuItem menuExit = new MenuItem("Exit");
     menuFile.add(menuExit);
     menuExit.addActionListener(e -> System.exit(0));
+
+    update(null, null);
   }
 
   @Override
   public final void update(Observable o, Object arg) {
     setFont(config.getFont());
     setBackground(config.getBackgroundColor());
+
+    final Insets insets = this.getInsets();
+    final Rectangle2D clockSize = getClockSize();
+    final int margin = 32;
+    setSize((int)clockSize.getWidth() + (insets.left + insets.right) + margin * 2,
+            (int)clockSize.getHeight() + (insets.top + insets.bottom) + margin * 2);
     repaint();
   }
 
   @Override
   public final void paint(final Graphics g) {
     final Image offscreen = createImage(this.getWidth(), this.getHeight());
-
     final Graphics offscreenGrapghics = offscreen.getGraphics();
     final Graphics2D canvas = (Graphics2D) offscreenGrapghics;
     final GregorianCalendar calender = new GregorianCalendar();
@@ -82,9 +83,18 @@ public final class DigitalClock extends Frame implements Runnable, Observer {
     canvas.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     canvas.setColor(config.getFontColor());
-    canvas.drawString(formatter.format(calender.getTime()), FontX, FontY);
+
+    final int margin = 32;
+    canvas.drawString(formatter.format(calender.getTime()),
+                      this.getInsets().left + margin,
+                      this.getInsets().top + margin + (int)this.getClockSize().getHeight());
 
     g.drawImage(offscreen, 0, 0, this);
+  }
+
+  private Rectangle2D getClockSize() {
+    return new TextLayout("0000/00/00 00:00:00", config.getFont(),
+                          ((Graphics2D)getGraphics()).getFontRenderContext()).getBounds();
   }
 
   @Override
