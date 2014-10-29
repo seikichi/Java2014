@@ -1,17 +1,17 @@
 package ch07.ex07_02;
 
 public final class NumberLiteral {
-  char c;
-  byte b;
-  short s;
-  int i;
-  long l;
-  float f;
-  double d;
+  static char c;
+  static byte b;
+  static short s;
+  static int i;
+  static long l;
+  static float f;
+  static double d;
 
   // Literals: 'Q', 29, 1.0f, 1.0;
 
-  private void assignToChar() {
+  private static void assignToChar() {
     c = 'Q';
     c = 1;
     // c = -1;
@@ -20,7 +20,7 @@ public final class NumberLiteral {
     // c = 2.0;
   }
 
-  private void assignToByte() {
+  private static void assignToByte() {
     b = 'Q';
     b = 1;
     b = -1;
@@ -30,7 +30,7 @@ public final class NumberLiteral {
     // b = 2.0;
   }
 
-  private void assignToShort() {
+  private static void assignToShort() {
     s = 'Q';
     s = 1;
     s = -1;
@@ -40,7 +40,7 @@ public final class NumberLiteral {
     // s = 2.0;
   }
 
-  private void assignToInt() {
+  private static void assignToInt() {
     i = 'Q';
     i = 1;
     i = -1;
@@ -50,7 +50,7 @@ public final class NumberLiteral {
     // i = 2.0;
   }
 
-  private void assignToLong() {
+  private static void assignToLong() {
     l = 'Q';
     l = 1;
     l = -1;
@@ -60,7 +60,7 @@ public final class NumberLiteral {
     // l = 2.0;
   }
 
-  private void assignToFloat() {
+  private static void assignToFloat() {
     f = 'Q';
     f = 1;
     f = -1;
@@ -70,7 +70,7 @@ public final class NumberLiteral {
     // f = 2.0;
   }
 
-  private void assignToDouble() {
+  private static void assignToDouble() {
     d = 'Q';
     d = 1;
     d = -1;
@@ -80,5 +80,13 @@ public final class NumberLiteral {
     d = 2.0;
   }
 
-  public static void main(String[] args) {}
+  public static void main(String[] args) {
+    assignToChar();
+    assignToByte();
+    assignToShort();
+    assignToInt();
+    assignToLong();
+    assignToFloat();
+    assignToDouble();
+  }
 }
