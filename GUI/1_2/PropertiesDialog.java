@@ -19,6 +19,7 @@ public final class PropertiesDialog extends Dialog {
     setVisible(true);
     setResizable(false);
     setVisible(true);
+    setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
 
     setLayout(new GridLayout(9, 1));
     addFontChoice();
