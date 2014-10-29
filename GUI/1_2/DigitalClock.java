@@ -75,8 +75,10 @@ public final class DigitalClock extends Frame implements Observer {
 
     final Insets insets = this.getInsets();
     final Rectangle2D clockSize = getClockSize();
-    setSize((int) clockSize.getWidth() + insets.left + insets.right + margin * 2,
-            (int) clockSize.getHeight() + insets.top + insets.bottom + margin * 2);
+
+    int newWidth = (int) clockSize.getWidth() + insets.left + insets.right + margin * 2;
+    int newHeight = (int) clockSize.getHeight() + insets.top + insets.bottom + margin * 2;
+    setSize(newWidth, newHeight);
     repaint();
   }
 
@@ -118,7 +120,7 @@ public final class DigitalClock extends Frame implements Observer {
 
   private Rectangle2D getClockSize() {
     FontRenderContext ctx = ((Graphics2D) offscreenGrapghics).getFontRenderContext();
-    return new TextLayout(model.getClockText(), model.getFont(), ctx).getBounds();
+    return new TextLayout("1234/56/78 00:00:00", model.getFont(), ctx).getBounds();
   }
 
   public static void main(String[] args) {
