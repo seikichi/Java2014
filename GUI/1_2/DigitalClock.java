@@ -51,12 +51,18 @@ public final class DigitalClock extends Frame implements Observer {
   }
 
   private void createMenu() {
+    Font font = new Font(Font.DIALOG, Font.PLAIN, 12);
     Frame self = this;
     MenuBar menuBar = new MenuBar();
+    menuBar.setFont(font);
     setMenuBar(menuBar);
+
     Menu menuFile = new Menu("File");
+    menuFile.setFont(font);
     menuBar.add(menuFile);
+
     MenuItem menuProperties = new MenuItem("Properties ...", new MenuShortcut('P'));
+    menuProperties.setFont(font);
     menuFile.add(menuProperties);
     menuProperties.addActionListener(e -> new PropertiesDialog(self, model));
   }
