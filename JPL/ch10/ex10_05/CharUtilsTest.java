@@ -46,6 +46,6 @@ public final class CharUtilsTest {
   @Theory
   public void printBetween(Data data) {
     CharUtils.printBetween(data.first, data.last);
-    assertThat(outputStream, hasToString(data.output + "\n"));
+    assertThat(outputStream, hasToString(String.format(data.output + "%n")));
   }
 }
