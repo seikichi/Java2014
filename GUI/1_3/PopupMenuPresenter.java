@@ -10,12 +10,14 @@ import java.util.HashMap;
 
 public final class PopupMenuPresenter {
   final PopupMenu popup = new PopupMenu();
+  final Font font = new Font(Font.DIALOG, Font.PLAIN, 12);
   final DigitalClockModel model;
 
   HashMap<String, Color> colors = new HashMap<String, Color>();
 
   PopupMenuPresenter(Window owner, DigitalClockModel model) {
     this.model = model;
+    popup.setFont(font);
     initializeColors();
 
     addFontMenu();
@@ -33,9 +35,11 @@ public final class PopupMenuPresenter {
 
   private void addFontMenu() {
     Menu menu = new Menu("Font");
+    menu.setFont(font);
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     for (Font font : ge.getAllFonts()) {
       MenuItem item = new MenuItem(font.getName());
+      item.setFont(font);
       item.addActionListener(e -> {
         model.setFontName(e.getActionCommand().toString());
       });
@@ -46,6 +50,7 @@ public final class PopupMenuPresenter {
 
   private void addFontSizeMenu() {
     Menu menu = new Menu("Font Size");
+    menu.setFont(font);
     int[] fontSizes = {
       8, 9, 10, 11, 12,
       14, 16, 18, 20,
@@ -55,6 +60,7 @@ public final class PopupMenuPresenter {
     };
     for (int size : fontSizes) {
       MenuItem item = new MenuItem(String.valueOf(size));
+      item.setFont(font);
       item.addActionListener(e -> {
         model.setFontSize(Integer.parseInt(e.getActionCommand().toString()));
       });
@@ -65,8 +71,10 @@ public final class PopupMenuPresenter {
 
   private void addFontColorMenu() {
     Menu menu = new Menu("Font Color");
+    menu.setFont(font);
     for (String colorName : colors.keySet()) {
       MenuItem item = new MenuItem(colorName);
+      item.setFont(font);
       item.addActionListener(e -> {
          String name = e.getActionCommand().toString();
          model.setFontColor(colors.get(name));
@@ -78,8 +86,10 @@ public final class PopupMenuPresenter {
 
   private void addBackgroundColorMenu() {
     Menu menu = new Menu("Background Color");
+    menu.setFont(font);
     for (String colorName : colors.keySet()) {
       MenuItem item = new MenuItem(colorName);
+      item.setFont(font);
       item.addActionListener(e -> {
          String name = e.getActionCommand().toString();
          model.setBackgroundColor(colors.get(name));
@@ -91,6 +101,7 @@ public final class PopupMenuPresenter {
 
   private void addCloseMenu() {
     MenuItem item = new MenuItem("Close");
+    item.setFont(font);
     item.addActionListener(e -> System.exit(0));
     popup.add(item);
   }

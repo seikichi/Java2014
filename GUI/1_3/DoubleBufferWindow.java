@@ -33,6 +33,7 @@ public final class DoubleBufferWindow extends Window {
     if (buffer == null ||
         buffer.getWidth(this) != dim.width ||
         buffer.getHeight(this) != dim.height) {
+      if (bufferGrapghics != null) { bufferGrapghics.dispose(); }
       buffer = createImage(dim.width, dim.height);
       bufferGrapghics = buffer.getGraphics();
     }
