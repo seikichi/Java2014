@@ -50,7 +50,7 @@ public final class StringUtils {
     }
     String reversed = new StringBuilder(number).reverse().toString();
     String replaced = reversed.replaceAll(String.format("(\\d{%d})", digits), String.format("$1%s", delimiter));
-    if (replaced.endsWith(delimiter)) {
+    if (number.length() % digits == 0) {
       replaced = replaced.substring(0, replaced.length() - delimiter.length());
     }
     return new StringBuilder(replaced).reverse().toString();

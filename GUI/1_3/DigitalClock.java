@@ -22,6 +22,8 @@ public final class DigitalClock extends Window implements Runnable {
   private static int FontY = 96;
   private static String timeFormat = "yyyy/MM/dd HH:mm:ss";
 
+  private PopupMenuPresenter popupMenuPresenter;
+
   public DigitalClock() {
     super(null);
     setSize(Width, Height);
@@ -33,13 +35,17 @@ public final class DigitalClock extends Window implements Runnable {
         }
     });
 
+    popupMenuPresenter = new PopupMenuPresenter(this);
+
     addMouseListener(new MouseAdapter() {
         @Override public void mouseClicked(MouseEvent event) {
           if (event.getButton() != MouseEvent.BUTTON3) { return; }
           System.out.println("right click!!!!");
+          popupMenuPresenter.show(event.getComponent(), event.getX(), event.getY());
         }
         @Override public void mousePressed(MouseEvent event) {
-          System.out.println("pressed!!!!");
+          if (event.getButton() != MouseEvent.BUTTON1) { return; }
+          System.out.println("left pressed!!!!");
         }
     });
     addMouseMotionListener(new MouseMotionAdapter() {
