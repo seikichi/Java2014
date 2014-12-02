@@ -7,17 +7,14 @@ import java.awt.MenuItem;
 import java.awt.Window;
 
 public final class PopupMenuPresenter {
-  final PopupMenu popup;
+  final PopupMenu popup = new PopupMenu();
 
   PopupMenuPresenter(Window owner) {
-    popup = new PopupMenu();
-
     addFontMenu();
     addFontSizeMenu();
     addFontColorMenu();
     addBackgroundColorMenu();
     addCloseMenu();
-
     owner.add(popup);
   }
 
