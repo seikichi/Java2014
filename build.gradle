@@ -30,12 +30,14 @@ project(':GUI:1_3') {
     test { java { srcDirs = ['.']; include '**/*Test.java' } }
   }
   mainClassName = 'DigitalClock'
+  archivesBaseName = 'DigitalClock'
+  version = '0.3'
 
   jar {
     manifest {
       attributes 'Manifest-Version' : '1.0'
       attributes 'Main-Class' : 'DigitalClock'
-      attributes 'Implementation-Version' : '0.1'
+      attributes 'Implementation-Version' : version
     }
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
   }
