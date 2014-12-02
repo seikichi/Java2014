@@ -62,7 +62,7 @@ public final class DigitalClockPresenter implements Observer {
   }
 
   class Content implements DoubleBufferWindow.Content {
-    Dimension size = new Dimension(1, 1);
+    private Dimension size = new Dimension(1, 1);
 
     @Override
     public Dimension getSize() {
@@ -88,17 +88,24 @@ public final class DigitalClockPresenter implements Observer {
       canvas.drawString(formatter.format(calender.getTime()),
                         insets.left + Margin,
                         insets.top + Margin + (int)clockSize.getHeight());
-      }
+    }
   }
 
   class Adapter extends MouseAdapter {
-    Point startPoint;
+    private Point startPoint = null;
+
     @Override public void mousePressed(MouseEvent event) {
       if (event.getButton() != MouseEvent.BUTTON1) { return; }
       startPoint = event.getPoint();
     }
-    @Override public void mouseDragged(MouseEvent event) {
+
+    @Override public void mouseReleased(MouseEvent event) {
       if (event.getButton() != MouseEvent.BUTTON1) { return; }
+      startPoint = null;
+    }
+
+    @Override public void mouseDragged(MouseEvent event) {
+      if (startPoint == null) { return; }
       Point mousePoint = event.getPoint();
       Point clockPoint = window.getLocation();
 
