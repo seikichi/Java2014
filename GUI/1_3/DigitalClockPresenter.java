@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Window;
@@ -46,22 +47,28 @@ public final class DigitalClockPresenter {
     window.setSize(Width, Height);
     window.setFont(new Font(Font.DIALOG, Font.BOLD, FontSize));
     window.setVisible(true);
-    window.addMouseListener(new MouseAdapter() {
-      @Override public void mouseClicked(MouseEvent event) {
-        if (event.getButton() != MouseEvent.BUTTON3) { return; }
-        System.out.println("right click!!!!");
-        popupMenuPresenter.show(event.getComponent(), event.getX(), event.getY());
-      }
+    window.addMouseListener(MouseAdapterFactory.clicked(event -> {
+      if (event.getButton() != MouseEvent.BUTTON3) { return; }
+      popupMenuPresenter.show(event.getComponent(), event.getX(), event.getY());
+    }));
+
+    MouseAdapter adapter = new MouseAdapter() {
+      Point startPoint;
       @Override public void mousePressed(MouseEvent event) {
         if (event.getButton() != MouseEvent.BUTTON1) { return; }
-        System.out.println("left pressed!!!!");
+        startPoint = event.getPoint();
       }
-    });
-    window.addMouseMotionListener(new MouseMotionAdapter() {
       @Override public void mouseDragged(MouseEvent event) {
-        System.out.println("dragged!");
+        Point mousePoint = event.getPoint();
+        Point clockPoint = window.getLocation();
+
+        int newClockX = clockPoint.x + mousePoint.x - startPoint.x;
+        int newClockY = clockPoint.y + mousePoint.y - startPoint.y;
+        window.setLocation(new Point(newClockX, newClockY));
       }
-    });
+    };
+    window.addMouseListener(adapter);
+    window.addMouseMotionListener(adapter);
   }
 
   public void repaint() {
