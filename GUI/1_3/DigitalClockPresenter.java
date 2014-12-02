@@ -5,47 +5,66 @@ import java.awt.Font;
 import java.awt.Window;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.font.TextLayout;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.Observable;
+import java.util.Observer;
 
-public final class DigitalClockPresenter {
+public final class DigitalClockPresenter implements Observer {
+  private final DigitalClockModel model;
   private final DoubleBufferWindow window;
+  private final DoubleBufferWindow.Content content;
   private final PopupMenuPresenter popupMenuPresenter;
 
   private static final long serialVersionUID = 1L;
-
-  private static int Width = 600;
-  private static int Height = 128;
-  private static int FontSize = 48;
-  private static int FontX = 32;
-  private static int FontY = 96;
+  private static final int Margin = 32;
   private static String timeFormat = "yyyy/MM/dd HH:mm:ss";
 
-  DigitalClockPresenter() {
-    window = new DoubleBufferWindow(null, new DoubleBufferWindow.Content() {
+  DigitalClockPresenter(DigitalClockModel clockModel) {
+    model = clockModel;
+    model.addObserver(this);
+    content = new DoubleBufferWindow.Content() {
+      Dimension size;
       @Override public Dimension getSize() {
-        return new Dimension(Width, Height);
+        if (size == null) { return new Dimension(1, 1); }
+        return size;
       }
       @Override public void draw(Graphics2D canvas) {
-        final GregorianCalendar calender = new GregorianCalendar();
-        final SimpleDateFormat formatter = new SimpleDateFormat(timeFormat);
-        canvas.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        canvas.setColor(Color.BLACK);
-        canvas.setBackground(Color.WHITE);
-        canvas.clearRect(0, 0, Width, Height);
-        canvas.drawString(formatter.format(calender.getTime()), FontX, FontY);
-      }
-    });
-    popupMenuPresenter = new PopupMenuPresenter(window);
+        FontRenderContext ctx = canvas.getFontRenderContext();
+        Rectangle2D clockSize = new TextLayout("1234/56/78 00:00:00", model.getFont(), ctx).getBounds();
+        Insets insets = window.getInsets();
+        int width = (int) clockSize.getWidth() + insets.left + insets.right + Margin * 2;
+        int height = (int) clockSize.getHeight() + insets.top + insets.bottom + Margin * 2;
+        size = new Dimension(width, height);
+        window.setSize(size.width, size.height);
 
-    window.setSize(Width, Height);
-    window.setFont(new Font(Font.DIALOG, Font.BOLD, FontSize));
+        GregorianCalendar calender = new GregorianCalendar();
+        SimpleDateFormat formatter = new SimpleDateFormat(timeFormat);
+        canvas.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        canvas.setColor(model.getFontColor());
+        canvas.setBackground(model.getBackgroundColor());
+        canvas.clearRect(0, 0, size.width, size.height);
+        canvas.drawString(formatter.format(calender.getTime()),
+                          insets.left + Margin,
+                          insets.top + Margin + (int)clockSize.getHeight());
+      }
+    };
+    window = new DoubleBufferWindow(null, content);
+    popupMenuPresenter = new PopupMenuPresenter(window, model);
+
+    Dimension size = content.getSize();
+    window.setSize(size.width, size.height);
+    window.setFont(model.getFont());
     window.setVisible(true);
     window.addMouseListener(MouseAdapterFactory.clicked(event -> {
       if (event.getButton() != MouseEvent.BUTTON3) { return; }
@@ -59,6 +78,7 @@ public final class DigitalClockPresenter {
         startPoint = event.getPoint();
       }
       @Override public void mouseDragged(MouseEvent event) {
+        if (event.getButton() != MouseEvent.BUTTON1) { return; }
         Point mousePoint = event.getPoint();
         Point clockPoint = window.getLocation();
 
@@ -73,5 +93,13 @@ public final class DigitalClockPresenter {
 
   public void repaint() {
     window.repaint();
+  }
+
+  @Override
+  public void update(Observable o, Object arg) {
+    Dimension size = content.getSize();
+    window.setSize(size.width, size.height);
+    window.setFont(model.getFont());
+    repaint();
   }
 }

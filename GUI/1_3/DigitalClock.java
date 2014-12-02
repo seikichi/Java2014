@@ -4,7 +4,8 @@ public final class DigitalClock implements Runnable {
   }
 
   @Override public final void run() {
-    DigitalClockPresenter presenter = new DigitalClockPresenter();
+    DigitalClockModel model = new DigitalClockModel();
+    DigitalClockPresenter presenter = new DigitalClockPresenter(model);
     while (true) {
       presenter.repaint();
       try {
