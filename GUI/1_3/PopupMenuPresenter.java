@@ -7,13 +7,15 @@ import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.Window;
 import java.util.HashMap;
+import java.util.Arrays;
 
 public final class PopupMenuPresenter {
-  final PopupMenu popup = new PopupMenu();
-  final Font font = new Font(Font.DIALOG, Font.PLAIN, 12);
-  final DigitalClockModel model;
+  private final PopupMenu popup = new PopupMenu();
+  private final Font font = new Font(Font.DIALOG, Font.PLAIN, 12);
+  private final DigitalClockModel model;
+  private final HashMap<String, Color> colors = new HashMap<String, Color>();
 
-  HashMap<String, Color> colors = new HashMap<String, Color>();
+  private static int fontNum = 12;
 
   PopupMenuPresenter(Window owner, DigitalClockModel model) {
     this.model = model;
@@ -37,8 +39,8 @@ public final class PopupMenuPresenter {
     Menu menu = new Menu("Font");
     menu.setFont(font);
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    for (Font font : ge.getAllFonts()) {
-      MenuItem item = new MenuItem(font.getName());
+    for (Font menuFont : ge.getAllFonts()) {
+      MenuItem item = new MenuItem(menuFont.getName());
       item.setFont(font);
       item.addActionListener(e -> {
         model.setFontName(e.getActionCommand().toString());
