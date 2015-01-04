@@ -2,21 +2,34 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Point;
 import java.util.Observable;
 import java.util.Set;
 import java.util.HashMap;
+import java.util.prefs.Preferences;
+import java.util.prefs.BackingStoreException;
 
 final class DigitalClockModel extends Observable {
   private int fontSize;
   private String fontName;
   private Color fontColor;
   private Color backgroundColor;
+  private Point location;
+
+  private int prevFontSize;
+  private String prevFontName;
+  private Color prevFontColor;
+  private Color prevBackgroundColor;
+  private Point prevLocation;
 
   public DigitalClockModel() {
-    fontSize = 48;
-    fontName = Font.DIALOG;
-    fontColor = Color.BLACK;
-    backgroundColor = Color.WHITE;
+    Preferences prefs = Preferences.userNodeForPackage(this.getClass());
+    prevFontSize = fontSize = Integer.parseInt(prefs.get("fontSize", "48"));
+    prevFontName = fontName = prefs.get("fontName", Font.DIALOG);
+    prevFontColor = fontColor = colors.get(prefs.get("fontColorName", getColorName(Color.BLACK)));
+    prevBackgroundColor = backgroundColor = colors.get(prefs.get("backgroundColorName", getColorName(Color.WHITE)));
+    prevLocation = location = new Point(Integer.parseInt(prefs.get("locationX", String.valueOf(-1))),
+                                        Integer.parseInt(prefs.get("locationY", String.valueOf(-1))));
   }
 
   public void notifyObservers() {
@@ -29,6 +42,7 @@ final class DigitalClockModel extends Observable {
   public String getFontName() { return fontName; }
   public Color getFontColor() { return fontColor; }
   public Color getBackgroundColor() { return backgroundColor; }
+  public Point getLocation() { return location; }
 
   public void setFontSize(int newFontSize) {
     fontSize = newFontSize;
@@ -45,6 +59,37 @@ final class DigitalClockModel extends Observable {
   public void setBackgroundColorName(String newBackgroundColorName) {
     backgroundColor = colors.get(newBackgroundColorName);
     notifyObservers();
+  }
+  public void setLocation(Point newLocation) {
+    location = newLocation;
+    notifyObservers();
+  }
+
+  public void backup() {
+    prevFontSize = fontSize;
+    prevFontName = fontName;
+    prevFontColor = fontColor;
+    prevBackgroundColor = backgroundColor;
+    prevLocation = location;
+  }
+
+  public void restore() {
+    fontSize = prevFontSize;
+    fontName = prevFontName;
+    fontColor = prevFontColor;
+    backgroundColor = prevBackgroundColor;
+    location = prevLocation;
+    notifyObservers();
+  }
+
+  public void save() {
+    Preferences prefs = Preferences.userNodeForPackage(this.getClass());
+    prefs.put("fontSize", String.valueOf(fontSize));
+    prefs.put("fontName", String.valueOf(fontName));
+    prefs.put("fontColorName", getColorName(fontColor));
+    prefs.put("backgroundColorName", getColorName(backgroundColor));
+    prefs.put("locationX", String.valueOf(location.x));
+    prefs.put("locationY", String.valueOf(location.y));
   }
 
   private static final HashMap<String, Color> colors = new HashMap<String, Color>();

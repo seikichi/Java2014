@@ -17,6 +17,8 @@ public final class PropertiesDialogPresenter {
 
   PropertiesDialogPresenter(Frame owner, DigitalClockModel model) {
     this.model = model;
+    model.backup();
+
     this.dialog = new Dialog(owner);
 
     this.dialog.setTitle("Properties");
@@ -25,7 +27,10 @@ public final class PropertiesDialogPresenter {
     this.dialog.setResizable(false);
     this.dialog.setVisible(true);
     this.dialog.setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
-    this.dialog.addWindowListener(WindowAdapterFactory.closing(e -> this.dialog.dispose()));
+    this.dialog.addWindowListener(WindowAdapterFactory.closing(e -> {
+        model.restore();
+        this.dialog.dispose();
+    }));
 
     this.layout = new GridBagLayout();
     this.dialog.setLayout(layout);
@@ -33,6 +38,7 @@ public final class PropertiesDialogPresenter {
     this.addFontSizeChoice();
     this.addFontColorChoice();
     this.addBackgroundColorChoice();
+    this.addButtons();
   }
 
   private void addFontChoice() {
@@ -58,6 +64,8 @@ public final class PropertiesDialogPresenter {
     cons.gridy = 0;
     cons.gridx = 1;
     cons.anchor =  GridBagConstraints.WEST;
+    cons.gridwidth = 2;
+    cons.fill = GridBagConstraints.HORIZONTAL;
     this.layout.setConstraints(fontChoice, cons);
     this.dialog.add(fontChoice);
   }
@@ -91,6 +99,8 @@ public final class PropertiesDialogPresenter {
     cons.gridy = 1;
     cons.gridx = 1;
     cons.anchor =  GridBagConstraints.WEST;
+    cons.gridwidth = 2;
+    cons.fill = GridBagConstraints.HORIZONTAL;
     this.layout.setConstraints(fontSizeChoice, cons);
     this.dialog.add(fontSizeChoice);
   }
@@ -117,6 +127,8 @@ public final class PropertiesDialogPresenter {
     cons.gridy = 2;
     cons.gridx = 1;
     cons.anchor =  GridBagConstraints.WEST;
+    cons.gridwidth = 2;
+    cons.fill = GridBagConstraints.HORIZONTAL;
     this.layout.setConstraints(fontColorChoice, cons);
     this.dialog.add(fontColorChoice);
   }
@@ -143,13 +155,35 @@ public final class PropertiesDialogPresenter {
     cons.gridy = 3;
     cons.gridx = 1;
     cons.anchor =  GridBagConstraints.WEST;
+    cons.gridwidth = 2;
+    cons.fill = GridBagConstraints.HORIZONTAL;
     this.layout.setConstraints(backgroungColorChoice, cons);
     this.dialog.add(backgroungColorChoice);
   }
 
-  // private void addOkButton() {
-  //   Button okButton = new Button("OK");
-  //   okButton.addActionListener(e -> dispose());
-  //   add(okButton);
-  // }
+  private void addButtons() {
+    Button okButton = new Button("OK");
+    Button cancelButton = new Button("Cancel");
+
+    GridBagConstraints cons = new GridBagConstraints();
+    cons.gridy = 4;
+    cons.gridx = 1;
+    cons.anchor =  GridBagConstraints.EAST;
+    this.layout.setConstraints(okButton, cons);
+    this.dialog.add(okButton);
+
+    cons.gridy = 4;
+    cons.gridx = 2;
+    cons.anchor =  GridBagConstraints.EAST;
+    this.layout.setConstraints(cancelButton, cons);
+    this.dialog.add(cancelButton);
+
+    okButton.addActionListener(e -> {
+      this.dialog.dispose();
+    });
+    cancelButton.addActionListener(e -> {
+      model.restore();
+      this.dialog.dispose();
+    });
+  }
 }
