@@ -1,0 +1,2 @@
+- enum, interface, @interface のテスト
+- nested の取り扱い

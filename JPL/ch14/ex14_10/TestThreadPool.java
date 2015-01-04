@@ -249,7 +249,7 @@ public class TestThreadPool {
 		assertEquals(numberOfThreads, threads.size());
 	}
 	
-	@Test(timeout=2000)
+	@Test(timeout=3000)
 	public void testTerminationOfThreads() {
 		final List<Thread> threads = Collections.synchronizedList(new ArrayList<Thread>());
 		
