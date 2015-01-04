@@ -77,3 +77,35 @@ project(':GUI:1_4') {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
   }
 }
+
+project(':Interpret') {
+  apply plugin: 'java'
+  apply plugin: 'application'
+
+  sourceSets {
+    main { java { srcDirs = ['src']; } }
+    test { java { srcDirs = ['test']; } }
+  }
+
+  dependencies {
+    testCompile files('../lib/junit-4.11.jar')
+    testCompile files('../lib/hamcrest-all-1.3.jar')
+    testCompile files('../lib/fest-swing-1.2.jar')
+    testCompile files('../lib/fest-reflect-1.2.jar')
+    testCompile files('../lib/fest-assert-1.2.jar')
+    testCompile files('../lib/fest-util-1.1.2.jar')
+  }
+
+  mainClassName = 'Interpret'
+  archivesBaseName = 'Interpret'
+  version = '1.0'
+
+  jar {
+    manifest {
+      attributes 'Manifest-Version' : '1.0'
+      attributes 'Main-Class' : 'Interpret'
+      attributes 'Implementation-Version' : version
+    }
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}
