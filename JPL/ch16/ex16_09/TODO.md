@@ -1,3 +1,2 @@
 - TODO
-  - enum, interface, @interface のテスト
-  - nested の取り扱い
+  - enum，nested の取り扱い

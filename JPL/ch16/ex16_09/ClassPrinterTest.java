@@ -30,6 +30,9 @@ class Test8 {
 
 @Retention(RetentionPolicy.RUNTIME)
 @interface Annotation1 { }
+@interface Annotation2 { int value(); }
+
+interface Testable1 { void test(); }
 
 @RunWith(Theories.class)
 public class ClassPrinterTest {
@@ -58,7 +61,10 @@ public class ClassPrinterTest {
   static class Data {
     Class<?> input;
     String output;
-    Data(Class<?> input, String output) { this.input = input; this.output = output; }
+    Data(Class<?> input, String output) {
+      this.input = input;
+      this.output = output;
+    }
   }
 
   @DataPoints
@@ -122,6 +128,19 @@ public class ClassPrinterTest {
                   "  Test8();",
                   "  public <T> void m(T);",
                   "  public static <T> T id(T);",
+                  "}")),
+    new Data(Annotation2.class,
+             join("package ch16.ex16_09;",
+                  "",
+                  "abstract @interface Annotation2",
+                  "    implements annotation.Annotation {",
+                  "  public abstract int value();",
+                  "}")),
+    new Data(Testable1.class,
+             join("package ch16.ex16_09;",
+                  "",
+                  "abstract interface Testable1 {",
+                  "  public abstract void test();",
                   "}")),
   };
 
