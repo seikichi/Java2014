@@ -94,6 +94,7 @@ project(':Interpret') {
     testCompile files('../lib/fest-reflect-1.2.jar')
     testCompile files('../lib/fest-assert-1.2.jar')
     testCompile files('../lib/fest-util-1.1.2.jar')
+    testCompile files('../lib/jcip-annotations-1.0.jar')
   }
 
   mainClassName = 'Interpret'
