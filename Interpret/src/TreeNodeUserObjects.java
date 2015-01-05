@@ -60,6 +60,10 @@ class ClassTreeNodeUserObject implements TreeNodeUserObject {
     }
     return list;
   }
+
+  @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
+    return true;
+  }
 }
 
 class MethodTreeNodeUserObject implements TreeNodeUserObject {
@@ -70,6 +74,10 @@ class MethodTreeNodeUserObject implements TreeNodeUserObject {
   @Override public boolean isLeaf() { return true; }
   @Override public List<TreeNodeUserObject> getChildren() {
     return new ArrayList<>();
+  }
+  @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.METHOD ||
+      target == ExplorerDialogPresenter.TargetType.ALL;
   }
 }
 
@@ -82,6 +90,10 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
   @Override public List<TreeNodeUserObject> getChildren() {
     return new ArrayList<>();
   }
+  @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.FIELD ||
+      target == ExplorerDialogPresenter.TargetType.ALL;
+  }
 }
 
 class ConstructorTreeNodeUserObject implements TreeNodeUserObject {
@@ -92,5 +104,9 @@ class ConstructorTreeNodeUserObject implements TreeNodeUserObject {
   @Override public boolean isLeaf() { return true; }
   @Override public List<TreeNodeUserObject> getChildren() {
     return new ArrayList<>();
+  }
+  @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.CONSTRUCTOR ||
+      target == ExplorerDialogPresenter.TargetType.ALL;
   }
 }

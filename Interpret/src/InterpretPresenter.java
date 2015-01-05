@@ -20,6 +20,7 @@ public final class InterpretPresenter {
     frame.setName("Label Sample");
     frame.setVisible(true);
 
-    new ExplorerDialogPresenter(this.frame, this.model);
+    new ExplorerDialogPresenter(this.frame, this.model,
+                                ExplorerDialogPresenter.TargetType.CONSTRUCTOR);
   }
 }

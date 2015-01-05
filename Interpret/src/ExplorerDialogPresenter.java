@@ -24,7 +24,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 public class ExplorerDialogPresenter {
   private InterpretModel model;
-
+  private TargetType targetType;
   private JDialog dialog;
 
   private JTabbedPane tabbedPane;
@@ -35,8 +35,24 @@ public class ExplorerDialogPresenter {
   private JScrollPane staticScrollPane;
   private JTree staticTree;
 
-  public ExplorerDialogPresenter(JFrame owner, InterpretModel model) {
+  public enum TargetType {
+    CONSTRUCTOR,
+    METHOD,
+    FIELD,
+    ALL,
+  }
+
+  public ExplorerDialogPresenter(JFrame owner,
+                                 InterpretModel model) {
+    this(owner, model, TargetType.ALL);
+  }
+
+  public ExplorerDialogPresenter(JFrame owner,
+                                 InterpretModel model,
+                                 TargetType targetType) {
     this.model = model;
+    this.targetType = targetType;
+
     dialog = new JDialog(owner, "Explorer", true);
     tabbedPane = new JTabbedPane();
     staticPanel = new JPanel();
@@ -70,6 +86,7 @@ public class ExplorerDialogPresenter {
     }
     treeModel.reload(root);
 
+    ExplorerDialogPresenter.TargetType targetType = this.targetType;
     staticTree.addTreeWillExpandListener(new TreeWillExpandListener() {
         @Override public void treeWillCollapse(TreeExpansionEvent event) {
           DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
@@ -80,6 +97,7 @@ public class ExplorerDialogPresenter {
           DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
           TreeNodeUserObject userObject = (TreeNodeUserObject) node.getUserObject();
           for (TreeNodeUserObject child : userObject.getChildren()) {
+            if (!child.relatedTo(targetType)) { continue; }
             node.add(new DefaultMutableTreeNode(child, !child.isLeaf()));
           }
           treeModel.reload(node);
@@ -91,8 +109,9 @@ public class ExplorerDialogPresenter {
         List<DefaultMutableTreeNode> children = Collections.list(root.children());
         root.removeAllChildren();
         for (Class<?> klass : this.model.classList()) {
-          TreeNodeUserObject userObject = TreeNodeUserObjects.fromClass(klass);
-          DefaultMutableTreeNode node = new DefaultMutableTreeNode(userObject, !userObject.isLeaf());
+          TreeNodeUserObject child = TreeNodeUserObjects.fromClass(klass);
+          if (!child.relatedTo(targetType)) { continue; }
+          DefaultMutableTreeNode node = new DefaultMutableTreeNode(child, !child.isLeaf());
           root.add(node);
         }
         treeModel.reload(root);
@@ -120,5 +139,7 @@ public class ExplorerDialogPresenter {
     staticPanel.add(header, BorderLayout.PAGE_START);
     staticPanel.add(footer, BorderLayout.PAGE_END);
     staticPanel.add(staticScrollPane, BorderLayout.CENTER);
+
+    cancel.addActionListener(e -> { this.dialog.dispose(); });
   }
 }
