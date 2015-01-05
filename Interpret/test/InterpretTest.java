@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import javax.swing.JFrame;
+
 public class InterpretTest {
   private FrameFixture fixture;
 
@@ -17,12 +19,12 @@ public class InterpretTest {
 
   @Before
   public void before() {
-    Interpret window = GuiActionRunner.execute(new GuiQuery<Interpret>() {
-      @Override protected Interpret executeInEDT() throws Throwable {
-        return new Interpret();
+    JFrame frame = GuiActionRunner.execute(new GuiQuery<JFrame>() {
+      @Override protected JFrame executeInEDT() throws Throwable {
+        return new InterpretPresenter().frame;
       }
     });
-    fixture = new FrameFixture(window);
+    fixture = new FrameFixture(frame);
     fixture.show();
   }
 

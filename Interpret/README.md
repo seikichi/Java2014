@@ -35,6 +35,13 @@ Interpretプログラムを１つ作成する。
 メソッドを呼び出したりできるようにしなさい．
 
 # めも
+## いまの
+- ReflectionExplorer みたいなダイアログ欲しい．static とローカル変数
+  - ctor, method, field の選択ができると良い
+- 変更: explorer で選択して FieldChangeDialog で
+- 呼び出し: explorer で選択して MethodInvokeDialog で引数を選択 (また explorer)
+- 生成: explorer で選択して NewInstanceDialog で引数を選択 (また explorer)
+## 古いの
 必要な操作:
 - 生成 + 保存 (new)
 - メソッド呼び出し (invoke)
