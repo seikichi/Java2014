@@ -1,13 +1,10 @@
-import java.util.Collections;
-
-import java.awt.GridLayout;
-
-import java.awt.FlowLayout;
-import java.util.List;
-import java.util.Enumeration;
-
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.lang.Package;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -40,6 +37,8 @@ public class ExplorerDialogPresenter {
     METHOD,
     FIELD,
     ALL,
+    INSTANT_METHOD,
+    INSTANT_FIELD,
   }
 
   public ExplorerDialogPresenter(JFrame owner,
