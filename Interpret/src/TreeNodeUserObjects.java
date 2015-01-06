@@ -48,35 +48,12 @@ class InstanceTreeNodeUserObject implements TreeNodeUserObject {
   @Override public String toString() { return name; }
   @Override public boolean isLeaf() { return false; }
   @Override public List<TreeNodeUserObject> getChildren() {
-    if (this.instance == null) { return new ArrayList<>(); }
-    List<TreeNodeUserObject> list = new ArrayList<>();
-    Class<?> klass = this.instance.getClass();
-    if (klass.isArray()) {
-      int length = Array.getLength(instance);
-      for (int i = 0; i < length; i++) {
-        list.add(TreeNodeUserObjects.fromArray(instance, i));
-      }
-    }
-    for (Method method : klass.getMethods()) {
-      method.setAccessible(true);
-      if (Modifier.isStatic(method.getModifiers()) || Modifier.isAbstract(method.getModifiers())) {
-        continue;
-      }
-      list.add(TreeNodeUserObjects.fromMethod(method, instance));
-    }
-    for (Field field : klass.getFields()) {
-      field.setAccessible(true);
-      if (Modifier.isStatic(field.getModifiers()) || Modifier.isAbstract(field.getModifiers())) {
-        continue;
-      }
-      list.add(TreeNodeUserObjects.fromField(field, this.instance));
-    }
-    return list;
+    return TreeNodeUserObjectUtil.getChildren(this.instance);
   }
 
   @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
     return target == ExplorerDialogPresenter.TargetType.ALL ||
-      target == ExplorerDialogPresenter.TargetType.METHOD ||
+      target == ExplorerDialogPresenter.TargetType.FIELD ||
       target == ExplorerDialogPresenter.TargetType.FIELD_READONLY;
   }
 
@@ -102,33 +79,7 @@ class ArrayTreeNodeUserObject implements TreeNodeUserObject {
   @Override public List<TreeNodeUserObject> getChildren() {
     Object value = null;
     value = Array.get(array, index);
-    if (value == null) { return new ArrayList<>(); }
-
-    List<TreeNodeUserObject> list = new ArrayList<>();
-    Class<?> klass = value.getClass();
-
-    if (klass.isArray()) {
-      int length = Array.getLength(value);
-      for (int i = 0; i < length; i++) {
-        list.add(TreeNodeUserObjects.fromArray(value, i));
-      }
-    }
-
-    for (Method method : klass.getMethods()) {
-      method.setAccessible(true);
-      if (Modifier.isStatic(method.getModifiers()) || Modifier.isAbstract(method.getModifiers())) {
-        continue;
-      }
-      list.add(TreeNodeUserObjects.fromMethod(method, value));
-    }
-    for (Field field : klass.getFields()) {
-      field.setAccessible(true);
-      if (Modifier.isStatic(field.getModifiers()) || Modifier.isAbstract(field.getModifiers())) {
-        continue;
-      }
-      list.add(TreeNodeUserObjects.fromField(field, value));
-    }
-    return list;
+    return TreeNodeUserObjectUtil.getChildren(value);
   }
 
   @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
@@ -236,6 +187,45 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
     } catch (IllegalAccessException e) {
       e.printStackTrace();
     }
+    return TreeNodeUserObjectUtil.getChildren(value);
+  }
+  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.FIELD ||
+      target == ExplorerDialogPresenter.TargetType.FIELD_READONLY ||
+      target == ExplorerDialogPresenter.TargetType.ALL;
+  }
+  @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
+    return true;
+  }
+  @Override public ExplorerResult getWrapperObject() {
+    return FieldResult.fromField(field, receiver);
+  }
+}
+
+class ConstructorTreeNodeUserObject implements TreeNodeUserObject {
+  Constructor ctor;
+  ConstructorTreeNodeUserObject(Constructor ctor) { this.ctor = ctor; }
+
+  @Override public String toString() { return ctor.toGenericString(); }
+  @Override public boolean isLeaf() { return true; }
+  @Override public List<TreeNodeUserObject> getChildren() {
+    return new ArrayList<>();
+  }
+  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.CONSTRUCTOR ||
+      target == ExplorerDialogPresenter.TargetType.ALL;
+  }
+  @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.CONSTRUCTOR ||
+      target == ExplorerDialogPresenter.TargetType.ALL;
+  }
+  @Override public ExplorerResult getWrapperObject() {
+    return FunctionResult.fromConstructor(ctor);
+  }
+}
+
+class TreeNodeUserObjectUtil {
+  public static List<TreeNodeUserObject> getChildren(Object value) {
     if (value == null) { return new ArrayList<>(); }
     List<TreeNodeUserObject> list = new ArrayList<>();
     Class<?> klass = value.getClass();
@@ -262,39 +252,5 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
       list.add(TreeNodeUserObjects.fromField(field, value));
     }
     return list;
-  }
-  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
-    return true;
-  }
-  @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
-    return target == ExplorerDialogPresenter.TargetType.FIELD ||
-      target == ExplorerDialogPresenter.TargetType.METHOD ||
-      target == ExplorerDialogPresenter.TargetType.FIELD_READONLY ||
-      target == ExplorerDialogPresenter.TargetType.ALL;
-  }
-  @Override public ExplorerResult getWrapperObject() {
-    return FieldResult.fromField(field, receiver);
-  }
-}
-
-class ConstructorTreeNodeUserObject implements TreeNodeUserObject {
-  Constructor ctor;
-  ConstructorTreeNodeUserObject(Constructor ctor) { this.ctor = ctor; }
-
-  @Override public String toString() { return ctor.toGenericString(); }
-  @Override public boolean isLeaf() { return true; }
-  @Override public List<TreeNodeUserObject> getChildren() {
-    return new ArrayList<>();
-  }
-  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
-    return target == ExplorerDialogPresenter.TargetType.CONSTRUCTOR ||
-      target == ExplorerDialogPresenter.TargetType.ALL;
-  }
-  @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
-    return target == ExplorerDialogPresenter.TargetType.CONSTRUCTOR ||
-      target == ExplorerDialogPresenter.TargetType.ALL;
-  }
-  @Override public ExplorerResult getWrapperObject() {
-    return FunctionResult.fromConstructor(ctor);
   }
 }
