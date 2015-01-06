@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -229,6 +230,7 @@ class TreeNodeUserObjectUtil {
     if (value == null) { return new ArrayList<>(); }
     List<TreeNodeUserObject> list = new ArrayList<>();
     Class<?> klass = value.getClass();
+    Set<String> set = new HashSet<>();
 
     if (klass.isArray()) {
       int length = Array.getLength(value);
@@ -237,14 +239,18 @@ class TreeNodeUserObjectUtil {
       }
     }
 
-    for (Method method : klass.getMethods()) {
+    for (Method method : concat(klass.getDeclaredMethods(), klass.getMethods())) {
+      if (set.contains(method.toGenericString())) { continue; }
+      set.add(method.toGenericString());
       method.setAccessible(true);
       if (Modifier.isStatic(method.getModifiers()) || Modifier.isAbstract(method.getModifiers())) {
         continue;
       }
       list.add(TreeNodeUserObjects.fromMethod(method, value));
     }
-    for (Field field : klass.getFields()) {
+    for (Field field : concat(klass.getDeclaredFields(), klass.getFields())) {
+      if (set.contains(field.toGenericString())) { continue; }
+      set.add(field.toGenericString());
       field.setAccessible(true);
       if (Modifier.isStatic(field.getModifiers()) || Modifier.isAbstract(field.getModifiers())) {
         continue;
@@ -252,5 +258,11 @@ class TreeNodeUserObjectUtil {
       list.add(TreeNodeUserObjects.fromField(field, value));
     }
     return list;
+  }
+
+  private static <T> T[] concat(T[] first, T[] second) {
+    T[] result = Arrays.copyOf(first, first.length + second.length);
+    System.arraycopy(second, 0, result, first.length, second.length);
+    return result;
   }
 }
