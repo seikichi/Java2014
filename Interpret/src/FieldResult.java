@@ -1,4 +1,5 @@
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Array;
 
 interface FieldResult extends ExplorerResult {
@@ -65,10 +66,15 @@ class NormalFieldResult implements FieldResult {
     }
     return null;
   }
+
   @Override public void set(Object object) {
+    field.setAccessible(true);
     try {
+      Field modifiersField = Field.class.getDeclaredField("modifiers");
+      modifiersField.setAccessible(true);
+      modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
       field.set(receiver, object);
-    } catch (IllegalAccessException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
