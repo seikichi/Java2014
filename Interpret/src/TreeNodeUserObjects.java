@@ -60,7 +60,7 @@ class InstanceTreeNodeUserObject implements TreeNodeUserObject {
   }
 
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
-    return true;
+    return target != ExplorerDialogPresenter.TargetType.CONSTRUCTOR;
   }
   @Override public ExplorerResult getWrapperObject() {
     return FieldResult.fromInstance(this.instance);
@@ -91,7 +91,7 @@ class ArrayTreeNodeUserObject implements TreeNodeUserObject {
   }
 
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
-    return true;
+    return target != ExplorerDialogPresenter.TargetType.CONSTRUCTOR;
   }
   @Override public ExplorerResult getWrapperObject() {
     return FieldResult.fromArray(array, index);
@@ -102,7 +102,11 @@ class ClassTreeNodeUserObject implements TreeNodeUserObject {
   Class<?> klass;
   ClassTreeNodeUserObject(Class<?> klass) { this.klass = klass; }
 
-  @Override public String toString() { return klass.getName(); }
+  @Override public String toString() {
+    Class<?> enclosing = klass.getEnclosingClass();
+    if (enclosing == null) { return klass.getName(); }
+    return klass.getSimpleName();
+  }
   @Override public boolean isLeaf() { return false; }
   @Override public List<TreeNodeUserObject> getChildren() {
     List<TreeNodeUserObject> list = new ArrayList<>();
@@ -154,7 +158,12 @@ class MethodTreeNodeUserObject implements TreeNodeUserObject {
     this.receiver = receiver;
   }
 
-  @Override public String toString() { return method.toGenericString(); }
+  @Override public String toString() {
+    String className = method.getDeclaringClass().getName();
+    return method.toGenericString()
+      .replaceAll(className + "\\.", "")
+      .replaceAll("java\\.lang\\.", "");
+  }
   @Override public boolean isLeaf() { return true; }
   @Override public List<TreeNodeUserObject> getChildren() {
     return new ArrayList<>();
@@ -180,7 +189,12 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
     this.receiver = receiver;
   }
 
-  @Override public String toString() { return field.toGenericString(); }
+  @Override public String toString() {
+    String className = field.getDeclaringClass().getName();
+    return field.toGenericString()
+      .replaceAll(className + "\\.", "")
+      .replaceAll("java\\.lang\\.", "");
+  }
   @Override public boolean isLeaf() { return false; }
   @Override public List<TreeNodeUserObject> getChildren() {
     Object value = null;
@@ -197,7 +211,7 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
       target == ExplorerDialogPresenter.TargetType.ALL;
   }
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
-    return true;
+    return target != ExplorerDialogPresenter.TargetType.CONSTRUCTOR;
   }
   @Override public ExplorerResult getWrapperObject() {
     return FieldResult.fromField(field, receiver);
@@ -208,7 +222,13 @@ class ConstructorTreeNodeUserObject implements TreeNodeUserObject {
   Constructor ctor;
   ConstructorTreeNodeUserObject(Constructor ctor) { this.ctor = ctor; }
 
-  @Override public String toString() { return ctor.toGenericString(); }
+  @Override public String toString() {
+    String packageName = ctor.getDeclaringClass().getPackage().getName();
+    return ctor
+      .toGenericString()
+      .replaceAll(packageName + "\\.", "")
+      .replaceAll("java\\.lang\\.", "");
+  }
   @Override public boolean isLeaf() { return true; }
   @Override public List<TreeNodeUserObject> getChildren() {
     return new ArrayList<>();

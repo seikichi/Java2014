@@ -17,6 +17,7 @@ public final class InterpretModel extends Observable {
     this.klassList.add(TestData.class);
     this.klassList.add(Integer.class);
     this.klassList.add(System.class);
+    this.klassList.add(ArrayList.class);
 
     this.localMap.put("new Integer(10)", new Integer(10));
     this.localMap.put("new int[5]", new int[5]);
