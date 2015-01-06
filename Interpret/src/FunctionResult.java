@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,9 +31,7 @@ class MethodResult implements FunctionResult {
     method.setAccessible(true);
     try {
       return method.invoke(receiver, args);
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
+    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
       e.printStackTrace();
     }
     return null;
@@ -54,11 +54,7 @@ class ConstructorResult implements FunctionResult {
   public Object invoke(Object ...args) {
     try {
       return ctor.newInstance(args);
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
+    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
       e.printStackTrace();
     }
     return null;

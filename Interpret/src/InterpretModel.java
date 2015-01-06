@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
+import javax.swing.JOptionPane;
 
 public final class InterpretModel extends Observable {
   List<Class<?>> klassList = new ArrayList<>();
@@ -43,7 +44,9 @@ public final class InterpretModel extends Observable {
     Class<?> klass = null;
     try {
       klass = Class.forName(name);
-    } catch (ClassNotFoundException ignore) { }
+    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
+      e.printStackTrace();
+    }
     if (klass == null || klassList.contains(klass)) { return; }
     klassList.add(klass);
     Collections.sort(klassList, (lhs, rhs) -> lhs.toString().compareTo(rhs.toString()));

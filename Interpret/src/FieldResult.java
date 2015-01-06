@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Array;
@@ -29,6 +31,7 @@ class ArrayFieldResult implements FieldResult {
   @Override public Object get() {
     return Array.get(array, index);
   }
+
   @Override public void set(Object object) {
     Array.set(array, index, object);
   }
@@ -61,7 +64,7 @@ class NormalFieldResult implements FieldResult {
   @Override public Object get() {
     try {
       return field.get(receiver);
-    } catch (IllegalAccessException e) {
+    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
       e.printStackTrace();
     }
     return null;
@@ -74,7 +77,7 @@ class NormalFieldResult implements FieldResult {
       modifiersField.setAccessible(true);
       modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
       field.set(receiver, object);
-    } catch (Exception e) {
+    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
       e.printStackTrace();
     }
   }

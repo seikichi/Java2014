@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JOptionPane;
 
 public final class TreeNodeUserObjects {
   public static TreeNodeUserObject fromClass(Class<?> klass) {
@@ -185,7 +186,7 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
     Object value = null;
     try {
       value = this.field.get(this.receiver);
-    } catch (IllegalAccessException e) {
+    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
       e.printStackTrace();
     }
     return TreeNodeUserObjectUtil.getChildren(value);
