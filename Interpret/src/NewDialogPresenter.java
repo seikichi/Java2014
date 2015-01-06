@@ -22,7 +22,7 @@ class NewDialogPresenter {
 
     JPanel footer = new JPanel();
     JTextField dim = new JTextField("-1");
-    JTextField name = new JTextField("x");
+    JTextField name = new JTextField(model.getFreshVariableName());
     footer.setLayout(new GridLayout(3, 2));
     footer.add(new JLabel("create array if value >= 0:"));
     footer.add(dim);

@@ -13,13 +13,17 @@ public final class InterpretModel extends Observable {
   Map<String, Object> localMap = new HashMap<>();
 
   InterpretModel() {
+    this.klassList.add(Interpret.class);
+    this.klassList.add(TestData.class);
     this.klassList.add(Integer.class);
-    this.klassList.add(ArrayList.class);
     this.klassList.add(System.class);
 
-    this.localMap.put("x", new Integer(10));
-    this.localMap.put("y", new ArrayList<Integer>());
-    this.localMap.put("z", new int[5]);
+    this.localMap.put("new Integer(10)", new Integer(10));
+    this.localMap.put("new int[5]", new int[5]);
+  }
+
+  public String getFreshVariableName() {
+    return String.format("$%d", this.localMap.size());
   }
 
   public void notifyObservers() {

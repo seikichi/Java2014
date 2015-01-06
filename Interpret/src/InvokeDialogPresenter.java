@@ -20,7 +20,7 @@ class InvokeDialogPresenter {
     dialog.add(label, BorderLayout.PAGE_START);
 
     JPanel footer = new JPanel();
-    JTextField name = new JTextField("x");
+    JTextField name = new JTextField(model.getFreshVariableName());
     footer.setLayout(new GridLayout(2, 2));
     footer.add(new JLabel("variable name:"));
     footer.add(name);
