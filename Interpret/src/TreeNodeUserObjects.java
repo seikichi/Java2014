@@ -185,7 +185,7 @@ class ClassTreeNodeUserObject implements TreeNodeUserObject {
   }
 
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
-    return false;
+    return true;
   }
   @Override public ExplorerResult getWrapperObject() {
     return null;

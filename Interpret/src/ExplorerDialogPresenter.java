@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Window;
+import java.awt.Dialog;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.Package;
@@ -57,13 +59,13 @@ public class ExplorerDialogPresenter {
     public void onSelected(ExplorerResult result);
   }
 
-  public ExplorerDialogPresenter(JFrame owner,
+  public ExplorerDialogPresenter(Window owner,
                                  InterpretModel model,
                                  ExplorerListener listener) {
     this(owner, model, TargetType.ALL, listener);
   }
 
-  public ExplorerDialogPresenter(JFrame owner,
+  public ExplorerDialogPresenter(Window owner,
                                  InterpretModel model,
                                  TargetType targetType,
                                  ExplorerListener listener) {
@@ -71,7 +73,7 @@ public class ExplorerDialogPresenter {
     this.listener = listener;
     this.targetType = targetType;
 
-    dialog = new JDialog(owner, "Explorer", true);
+    dialog = new JDialog(owner, "Explorer", Dialog.ModalityType.APPLICATION_MODAL);
     JTabbedPane tabbedPane = new JTabbedPane();
     JPanel staticPanel = setupStaticPanel();
     JPanel localPanel = setupLocalPanel();
@@ -142,6 +144,7 @@ public class ExplorerDialogPresenter {
 
     staticTree.addTreeSelectionListener(e -> {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode)staticTree.getLastSelectedPathComponent();
+      if (node == null) { return; }
       TreeNodeUserObject userObject = (TreeNodeUserObject) node.getUserObject();
       selectedItem.set(userObject);
     });
