@@ -6,4 +6,5 @@ public interface TreeNodeUserObject {
   boolean relatedTo(ExplorerDialogPresenter.TargetType target);
   boolean matchTo(ExplorerDialogPresenter.TargetType target);
   ExplorerResult getWrapperObject();
+  String getSimpleName();
 }

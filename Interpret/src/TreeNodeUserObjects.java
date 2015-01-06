@@ -47,6 +47,7 @@ class InstanceTreeNodeUserObject implements TreeNodeUserObject {
     this.instance = instance;
   }
 
+  @Override public String getSimpleName() { return name; }
   @Override public String toString() { return name; }
   @Override public boolean isLeaf() { return false; }
   @Override public List<TreeNodeUserObject> getChildren() {
@@ -76,6 +77,7 @@ class ArrayTreeNodeUserObject implements TreeNodeUserObject {
     this.index = index;
   }
 
+  @Override public String getSimpleName() { return this.toString(); }
   @Override public String toString() { return String.format("[%d]", index); }
   @Override public boolean isLeaf() { return false; }
   @Override public List<TreeNodeUserObject> getChildren() {
@@ -102,6 +104,7 @@ class ClassTreeNodeUserObject implements TreeNodeUserObject {
   Class<?> klass;
   ClassTreeNodeUserObject(Class<?> klass) { this.klass = klass; }
 
+  @Override public String getSimpleName() { return klass.getSimpleName(); }
   @Override public String toString() {
     Class<?> enclosing = klass.getEnclosingClass();
     if (enclosing == null) { return klass.getName(); }
@@ -153,11 +156,13 @@ class ClassTreeNodeUserObject implements TreeNodeUserObject {
 class MethodTreeNodeUserObject implements TreeNodeUserObject {
   Method method;
   Object receiver;
+
   MethodTreeNodeUserObject(Method method, Object receiver) {
     this.method = method;
     this.receiver = receiver;
   }
 
+  @Override public String getSimpleName() { return method.getName(); }
   @Override public String toString() {
     String className = method.getDeclaringClass().getName();
     return method.toGenericString()
@@ -189,6 +194,7 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
     this.receiver = receiver;
   }
 
+  @Override public String getSimpleName() { return field.getName(); }
   @Override public String toString() {
     String className = field.getDeclaringClass().getName();
     String packageName = field.getDeclaringClass().getPackage().getName();
@@ -224,6 +230,7 @@ class ConstructorTreeNodeUserObject implements TreeNodeUserObject {
   Constructor ctor;
   ConstructorTreeNodeUserObject(Constructor ctor) { this.ctor = ctor; }
 
+  @Override public String getSimpleName() { return ctor.getName(); }
   @Override public String toString() {
     String packageName = ctor.getDeclaringClass().getPackage().getName();
     return ctor
