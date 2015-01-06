@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -165,6 +166,13 @@ class MethodTreeNodeUserObject implements TreeNodeUserObject {
   @Override public String getSimpleName() { return method.getName(); }
   @Override public String toString() {
     String className = method.getDeclaringClass().getName();
+    Package pac = method.getDeclaringClass().getPackage();
+    if (pac != null) {
+      return method.toGenericString()
+        .replaceAll(className + "\\.", "")
+        .replaceAll(pac.getName() + "\\.", "")
+        .replaceAll("java\\.lang\\.", "");
+    }
     return method.toGenericString()
       .replaceAll(className + "\\.", "")
       .replaceAll("java\\.lang\\.", "");
