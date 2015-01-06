@@ -191,8 +191,10 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
 
   @Override public String toString() {
     String className = field.getDeclaringClass().getName();
+    String packageName = field.getDeclaringClass().getPackage().getName();
     return field.toGenericString()
       .replaceAll(className + "\\.", "")
+      .replaceAll(packageName + "\\.", "")
       .replaceAll("java\\.lang\\.", "");
   }
   @Override public boolean isLeaf() { return false; }
