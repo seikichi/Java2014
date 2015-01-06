@@ -11,7 +11,7 @@ import java.awt.Dialog;
 class InspectDialogPresenter {
   public InspectDialogPresenter(Window owner, FieldResult field, InterpretModel model) {
     JDialog dialog = new JDialog(owner, "Inspect Field", Dialog.ModalityType.APPLICATION_MODAL);
-    JLabel label = new JLabel(String.format("current value: %s", field.get().toString()));
+    JLabel label = new JLabel("current value: " + field.get());
     JButton cancel = new JButton("Cancel");
     JButton update = new JButton("Update");
 

@@ -21,6 +21,8 @@ public final class InterpretModel extends Observable {
 
     this.localMap.put("new Integer(10)", new Integer(10));
     this.localMap.put("new int[5]", new int[5]);
+    this.localMap.put("new TestData()", new TestData());
+    this.localMap.put("new TestData[4]", new TestData[4]);
   }
 
   public String getFreshVariableName() {

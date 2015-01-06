@@ -209,11 +209,11 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
     if (pac != null) {
       return field.toGenericString()
         .replaceAll(className + "\\.", "")
+        .replaceAll(pac.getName() + "\\.", "")
         .replaceAll("java\\.lang\\.", "");
     }
     return field.toGenericString()
       .replaceAll(className + "\\.", "")
-      .replaceAll(pac.getName() + "\\.", "")
       .replaceAll("java\\.lang\\.", "");
   }
   @Override public boolean isLeaf() { return false; }
