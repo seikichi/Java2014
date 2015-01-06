@@ -1,7 +1,7 @@
+import java.lang.reflect.Constructor;
+
 import javax.swing.JButton;
-
 import java.awt.GridLayout;
-
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,18 +32,36 @@ public final class InterpretPresenter {
     frame.setSize(256, 256);
     frame.setVisible(true);
 
-    try {
-      new InspectDialogPresenter(frame,
-                                 FieldResult.fromField(this.getClass().getField("value"), this),
-                                 model);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    // try {
+    //   Constructor ctor = Integer.class.getConstructor(int.class);
+    //   new NewDialogPresenter(frame,
+    //                          new ConstructorResult(ctor),
+    //                          model);
+    //   // new InspectDialogPresenter(frame,
+    //   //                            FieldResult.fromField(this.getClass().getField("value"), this),
+    //   //                            model);
+    // } catch (Exception e) {
+    //   e.printStackTrace();
+    // }
+
+    newButton.addActionListener(e -> {
+        new ExplorerDialogPresenter(frame,
+                                    model,
+                                    ExplorerDialogPresenter.TargetType.CONSTRUCTOR,
+                                    (result) -> {
+                                      if (result == null) { return; }
+                                      if (result instanceof ConstructorResult) {
+                                        new NewDialogPresenter(frame,
+                                                               (ConstructorResult) result,
+                                                               model);
+                                      }
+        });
+      });
 
     inspectButton.addActionListener(e -> {
         new ExplorerDialogPresenter(frame,
                                     model,
-                                    ExplorerDialogPresenter.TargetType.FIELD,
+                                    ExplorerDialogPresenter.TargetType.FIELD_READONLY,
                                     (result) -> {
                                       if (result == null) { return; }
                                       if (result instanceof FieldResult) {

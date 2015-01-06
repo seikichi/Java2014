@@ -69,4 +69,6 @@ class ConstructorResult implements FunctionResult {
   public Object newArray(int size) {
     return Array.newInstance(ctor.getDeclaringClass(), size);
   }
+
+  public Constructor get() { return ctor; }
 }

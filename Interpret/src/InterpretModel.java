@@ -30,6 +30,11 @@ public final class InterpretModel extends Observable {
     return localMap;
   }
 
+  public void addLocalVariable(String name, Object value) {
+    this.localMap.put(name, value);
+    notifyObservers(this);
+  }
+
   public List<Class<?>> classList() {
     return this.klassList;
   }
