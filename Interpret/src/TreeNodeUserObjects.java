@@ -1,18 +1,23 @@
-import java.lang.Package;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.HashSet;
-import java.util.Set;
 import java.lang.Class;
+import java.lang.Package;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public final class TreeNodeUserObjects {
   public static TreeNodeUserObject fromClass(Class<?> klass) {
     return new ClassTreeNodeUserObject(klass);
+  }
+
+  public static TreeNodeUserObject fromArray(Object array, int index) {
+    return new ArrayTreeNodeUserObject(array, index);
   }
 
   public static TreeNodeUserObject fromMethod(Method method, Object receiver) {
@@ -46,6 +51,12 @@ class InstanceTreeNodeUserObject implements TreeNodeUserObject {
     if (this.instance == null) { return new ArrayList<>(); }
     List<TreeNodeUserObject> list = new ArrayList<>();
     Class<?> klass = this.instance.getClass();
+    if (klass.isArray()) {
+      int length = Array.getLength(instance);
+      for (int i = 0; i < length; i++) {
+        list.add(TreeNodeUserObjects.fromArray(instance, i));
+      }
+    }
     for (Method method : klass.getMethods()) {
       method.setAccessible(true);
       if (Modifier.isStatic(method.getModifiers()) || Modifier.isAbstract(method.getModifiers())) {
@@ -62,10 +73,74 @@ class InstanceTreeNodeUserObject implements TreeNodeUserObject {
     }
     return list;
   }
+
+  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.ALL ||
+      target == ExplorerDialogPresenter.TargetType.FIELD_READONLY;
+  }
+
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
-    // return target == ExplorerDialogPresenter.TargetType.CONSTRUCTOR ||
-    //   target == ExplorerDialogPresenter.TargetType.ALL;
     return true;
+  }
+  @Override public ExplorerResult getWrapperObject() {
+    return FieldResult.fromInstance(this.instance);
+  }
+}
+
+class ArrayTreeNodeUserObject implements TreeNodeUserObject {
+  Object array;
+  int index;
+
+  ArrayTreeNodeUserObject(Object array, int index) {
+    this.array = array;
+    this.index = index;
+  }
+
+  @Override public String toString() { return String.format("[%d]", index); }
+  @Override public boolean isLeaf() { return false; }
+  @Override public List<TreeNodeUserObject> getChildren() {
+    Object value = null;
+    value = Array.get(array, index);
+    if (value == null) { return new ArrayList<>(); }
+
+    List<TreeNodeUserObject> list = new ArrayList<>();
+    Class<?> klass = value.getClass();
+
+    if (klass.isArray()) {
+      int length = Array.getLength(value);
+      for (int i = 0; i < length; i++) {
+        list.add(TreeNodeUserObjects.fromArray(value, i));
+      }
+    }
+
+    for (Method method : klass.getMethods()) {
+      method.setAccessible(true);
+      if (Modifier.isStatic(method.getModifiers()) || Modifier.isAbstract(method.getModifiers())) {
+        continue;
+      }
+      list.add(TreeNodeUserObjects.fromMethod(method, value));
+    }
+    for (Field field : klass.getFields()) {
+      field.setAccessible(true);
+      if (Modifier.isStatic(field.getModifiers()) || Modifier.isAbstract(field.getModifiers())) {
+        continue;
+      }
+      list.add(TreeNodeUserObjects.fromField(field, value));
+    }
+    return list;
+  }
+
+  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.ALL ||
+      target == ExplorerDialogPresenter.TargetType.FIELD ||
+      target == ExplorerDialogPresenter.TargetType.FIELD_READONLY;
+  }
+
+  @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
+    return true;
+  }
+  @Override public ExplorerResult getWrapperObject() {
+    return FieldResult.fromArray(array, index);
   }
 }
 
@@ -105,8 +180,15 @@ class ClassTreeNodeUserObject implements TreeNodeUserObject {
     return list;
   }
 
+  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
+    return false;
+  }
+
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
-    return true;
+    return false;
+  }
+  @Override public ExplorerResult getWrapperObject() {
+    return null;
   }
 }
 
@@ -123,9 +205,16 @@ class MethodTreeNodeUserObject implements TreeNodeUserObject {
   @Override public List<TreeNodeUserObject> getChildren() {
     return new ArrayList<>();
   }
+  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.METHOD ||
+      target == ExplorerDialogPresenter.TargetType.ALL;
+  }
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
     return target == ExplorerDialogPresenter.TargetType.METHOD ||
       target == ExplorerDialogPresenter.TargetType.ALL;
+  }
+  @Override public ExplorerResult getWrapperObject() {
+    return FunctionResult.fromMethod(method, receiver);
   }
 }
 
@@ -138,7 +227,6 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
   }
 
   @Override public String toString() { return field.toGenericString(); }
-  // @Override public String toString() { return field.getName(); }
   @Override public boolean isLeaf() { return false; }
   @Override public List<TreeNodeUserObject> getChildren() {
     Object value = null;
@@ -150,6 +238,14 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
     if (value == null) { return new ArrayList<>(); }
     List<TreeNodeUserObject> list = new ArrayList<>();
     Class<?> klass = value.getClass();
+
+    if (klass.isArray()) {
+      int length = Array.getLength(value);
+      for (int i = 0; i < length; i++) {
+        list.add(TreeNodeUserObjects.fromArray(value, i));
+      }
+    }
+
     for (Method method : klass.getMethods()) {
       method.setAccessible(true);
       if (Modifier.isStatic(method.getModifiers()) || Modifier.isAbstract(method.getModifiers())) {
@@ -166,9 +262,16 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
     }
     return list;
   }
+  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
+    return true;
+  }
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
     return target == ExplorerDialogPresenter.TargetType.FIELD ||
+      target == ExplorerDialogPresenter.TargetType.FIELD_READONLY ||
       target == ExplorerDialogPresenter.TargetType.ALL;
+  }
+  @Override public ExplorerResult getWrapperObject() {
+    return FieldResult.fromField(field, receiver);
   }
 }
 
@@ -181,8 +284,15 @@ class ConstructorTreeNodeUserObject implements TreeNodeUserObject {
   @Override public List<TreeNodeUserObject> getChildren() {
     return new ArrayList<>();
   }
+  @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
+    return target == ExplorerDialogPresenter.TargetType.CONSTRUCTOR ||
+      target == ExplorerDialogPresenter.TargetType.ALL;
+  }
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
     return target == ExplorerDialogPresenter.TargetType.CONSTRUCTOR ||
       target == ExplorerDialogPresenter.TargetType.ALL;
+  }
+  @Override public ExplorerResult getWrapperObject() {
+    return FunctionResult.fromConstructor(ctor);
   }
 }

@@ -14,9 +14,11 @@ public final class InterpretModel extends Observable {
   InterpretModel() {
     this.klassList.add(Integer.class);
     this.klassList.add(ArrayList.class);
+    this.klassList.add(System.class);
 
     this.localMap.put("x", new Integer(10));
     this.localMap.put("y", new ArrayList<Integer>());
+    this.localMap.put("z", new int[5]);
   }
 
   public void notifyObservers() {

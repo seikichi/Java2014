@@ -1,11 +1,14 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.lang.Package;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -21,54 +24,75 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeModel;
 
 public class ExplorerDialogPresenter {
-  private InterpretModel model;
-  private TargetType targetType;
   private JDialog dialog;
+  private InterpretModel model;
+  private ExplorerListener listener;
+  private TargetType targetType;
 
-  private JTabbedPane tabbedPane;
-  private JPanel staticPanel;
-  private JPanel localPanel;
-  private JPanel logPanel;
-
-  private JScrollPane staticScrollPane;
-  private JTree staticTree;
+  private static class SelectedItem extends Observable {
+    private TreeNodeUserObject lastSelectedItem = null;
+    public void notifyObservers() {
+      setChanged();
+      notifyObservers(this);
+    }
+    public void set(TreeNodeUserObject userObject) {
+      lastSelectedItem = userObject;
+      notifyObservers();
+    }
+    private TreeNodeUserObject get() {
+      return lastSelectedItem;
+    }
+  }
+  private SelectedItem selectedItem = new SelectedItem();
 
   public enum TargetType {
     CONSTRUCTOR,
     METHOD,
     FIELD,
+    FIELD_READONLY,
     ALL,
-    INSTANT_METHOD,
-    INSTANT_FIELD,
   }
 
-  public ExplorerDialogPresenter(JFrame owner,
-                                 InterpretModel model) {
-    this(owner, model, TargetType.ALL);
+  public static interface ExplorerListener {
+    public void onSelected(ExplorerResult result);
   }
 
   public ExplorerDialogPresenter(JFrame owner,
                                  InterpretModel model,
-                                 TargetType targetType) {
+                                 ExplorerListener listener) {
+    this(owner, model, TargetType.ALL, listener);
+  }
+
+  public ExplorerDialogPresenter(JFrame owner,
+                                 InterpretModel model,
+                                 TargetType targetType,
+                                 ExplorerListener listener) {
     this.model = model;
+    this.listener = listener;
     this.targetType = targetType;
 
     dialog = new JDialog(owner, "Explorer", true);
-    tabbedPane = new JTabbedPane();
-    staticPanel = new JPanel();
-    localPanel = new JPanel();
-    logPanel = new JPanel();
-
-    setupStaticPanel();
-    setupLocalPanel();
+    JTabbedPane tabbedPane = new JTabbedPane();
+    JPanel staticPanel = setupStaticPanel();
+    JPanel localPanel = setupLocalPanel();
 
     tabbedPane.addTab("static", staticPanel);
     tabbedPane.addTab("local", localPanel);
-    // tabbedPane.addTab("log", logPanel);
 
     JButton select = new JButton("Select");
+    select.setEnabled(false);
+    this.selectedItem.addObserver((ob, arg) -> {
+      if (selectedItem.get() != null) {
+        select.setEnabled(selectedItem.get().matchTo(targetType));
+      }
+    });
     JButton cancel = new JButton("Cancel");
-    select.addActionListener(e -> { this.dialog.dispose(); });
+    select.addActionListener(e -> {
+      this.dialog.dispose();
+      if (selectedItem.get().getWrapperObject() != null) {
+        listener.onSelected(selectedItem.get().getWrapperObject());
+      }
+    });
     cancel.addActionListener(e -> { this.dialog.dispose(); });
     JPanel footer = new JPanel();
     footer.setLayout(new GridLayout(1, 2));
@@ -77,16 +101,17 @@ public class ExplorerDialogPresenter {
     dialog.getContentPane().add(footer, BorderLayout.PAGE_END);
 
     dialog.getContentPane().add(tabbedPane, BorderLayout.CENTER);
-    dialog.setSize(256, 256);
+    dialog.setSize(512, 512);
     dialog.setVisible(true);
   }
 
-  private void setupStaticPanel() {
+  private JPanel setupStaticPanel() {
+    JPanel staticPanel = new JPanel();
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("static");
     root.setAllowsChildren(true);
     DefaultTreeModel treeModel = new DefaultTreeModel(root, true);
 
-    staticTree = new JTree(treeModel);
+    JTree staticTree = new JTree(treeModel);
     staticTree.setRootVisible(false);
     staticTree.setShowsRootHandles(false);
 
@@ -115,6 +140,12 @@ public class ExplorerDialogPresenter {
         }
     });
 
+    staticTree.addTreeSelectionListener(e -> {
+      DefaultMutableTreeNode node = (DefaultMutableTreeNode)staticTree.getLastSelectedPathComponent();
+      TreeNodeUserObject userObject = (TreeNodeUserObject) node.getUserObject();
+      selectedItem.set(userObject);
+    });
+
     this.model.addObserver((ob, arg) -> {
         @SuppressWarnings("unchecked")
         List<DefaultMutableTreeNode> children = Collections.list(root.children());
@@ -131,7 +162,7 @@ public class ExplorerDialogPresenter {
     JTextField field = new JTextField();
     JButton button = new JButton("Add Class");
     JPanel header = new JPanel();
-    // JPanel footer = new JPanel();
+
     header.setLayout(new GridLayout(1, 2));
     header.add(field);
     header.add(button);
@@ -139,19 +170,19 @@ public class ExplorerDialogPresenter {
       this.model.addClass(field.getText());
       field.setText("");
     });
-    // footer.setLayout(new GridLayout(1, 1));
-    // footer.add(cancel);
 
-    staticScrollPane = new JScrollPane();
+    JScrollPane staticScrollPane = new JScrollPane();
     staticScrollPane.getViewport().setView(staticTree);
 
     staticPanel.setLayout(new BorderLayout());
     staticPanel.add(header, BorderLayout.PAGE_START);
-    // staticPanel.add(footer, BorderLayout.PAGE_END);
     staticPanel.add(staticScrollPane, BorderLayout.CENTER);
+
+    return staticPanel;
   }
 
-  private void setupLocalPanel() {
+  private JPanel setupLocalPanel() {
+    JPanel localPanel = new JPanel();
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("local");
     root.setAllowsChildren(true);
     DefaultTreeModel treeModel = new DefaultTreeModel(root, true);
@@ -185,9 +216,17 @@ public class ExplorerDialogPresenter {
         }
     });
 
+    localTree.addTreeSelectionListener(e -> {
+      DefaultMutableTreeNode node = (DefaultMutableTreeNode)localTree.getLastSelectedPathComponent();
+      TreeNodeUserObject userObject = (TreeNodeUserObject) node.getUserObject();
+      selectedItem.set(userObject);
+    });
+
     JScrollPane localScrollPane = new JScrollPane();
     localScrollPane.getViewport().setView(localTree);
     localPanel.setLayout(new BorderLayout());
     localPanel.add(localScrollPane, BorderLayout.CENTER);
+
+    return localPanel;
   }
 }
