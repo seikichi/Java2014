@@ -295,6 +295,7 @@ class TreeNodeUserObjectUtil {
       }
       list.add(TreeNodeUserObjects.fromField(field, value));
     }
+    Collections.sort(list, (lhs, rhs) -> lhs.getSimpleName().compareTo(rhs.getSimpleName()));
     return list;
   }
 
