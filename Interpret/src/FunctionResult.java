@@ -40,6 +40,8 @@ class MethodResult implements FunctionResult {
   public Class<?> getReturnType() {
     return method.getReturnType();
   }
+
+  public Method get() { return method; }
 }
 
 class ConstructorResult implements FunctionResult {

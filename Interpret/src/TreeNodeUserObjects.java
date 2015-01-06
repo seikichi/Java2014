@@ -76,6 +76,7 @@ class InstanceTreeNodeUserObject implements TreeNodeUserObject {
 
   @Override public boolean matchTo(ExplorerDialogPresenter.TargetType target) {
     return target == ExplorerDialogPresenter.TargetType.ALL ||
+      target == ExplorerDialogPresenter.TargetType.METHOD ||
       target == ExplorerDialogPresenter.TargetType.FIELD_READONLY;
   }
 
@@ -267,6 +268,7 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
   }
   @Override public boolean relatedTo(ExplorerDialogPresenter.TargetType target) {
     return target == ExplorerDialogPresenter.TargetType.FIELD ||
+      target == ExplorerDialogPresenter.TargetType.METHOD ||
       target == ExplorerDialogPresenter.TargetType.FIELD_READONLY ||
       target == ExplorerDialogPresenter.TargetType.ALL;
   }

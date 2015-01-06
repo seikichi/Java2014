@@ -25,6 +25,7 @@ class SelectPanelPresenter {
     float.class,
     double.class,
     char.class,
+    String.class,
     Object.class,
   };
   private JComboBox<Class<?>> box = new JComboBox<>(items);
