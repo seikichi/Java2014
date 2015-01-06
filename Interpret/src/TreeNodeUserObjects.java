@@ -197,10 +197,15 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
   @Override public String getSimpleName() { return field.getName(); }
   @Override public String toString() {
     String className = field.getDeclaringClass().getName();
-    String packageName = field.getDeclaringClass().getPackage().getName();
+    Package pac = field.getDeclaringClass().getPackage();
+    if (pac != null) {
+      return field.toGenericString()
+        .replaceAll(className + "\\.", "")
+        .replaceAll("java\\.lang\\.", "");
+    }
     return field.toGenericString()
       .replaceAll(className + "\\.", "")
-      .replaceAll(packageName + "\\.", "")
+      .replaceAll(pac.getName() + "\\.", "")
       .replaceAll("java\\.lang\\.", "");
   }
   @Override public boolean isLeaf() { return false; }
@@ -232,11 +237,14 @@ class ConstructorTreeNodeUserObject implements TreeNodeUserObject {
 
   @Override public String getSimpleName() { return ctor.getName(); }
   @Override public String toString() {
-    String packageName = ctor.getDeclaringClass().getPackage().getName();
-    return ctor
-      .toGenericString()
-      .replaceAll(packageName + "\\.", "")
-      .replaceAll("java\\.lang\\.", "");
+    Package pac = ctor.getDeclaringClass().getPackage();
+    if (pac != null) {
+      return ctor
+        .toGenericString()
+        .replaceAll(pac.getName() + "\\.", "")
+        .replaceAll("java\\.lang\\.", "");
+    }
+    return ctor.toGenericString().replaceAll("java\\.lang\\.", "");
   }
   @Override public boolean isLeaf() { return true; }
   @Override public List<TreeNodeUserObject> getChildren() {
