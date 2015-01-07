@@ -33,6 +33,7 @@ public final class DigitalClockPresenter implements Observer {
     frame.setSize(size.width, size.height);
     frame.setFont(model.getFont());
     frame.setVisible(true);
+    frame.setResizable(false);
 
     if (model.getLocation().x >= 0 && model.getLocation().y >= 0) {
       frame.setLocation(model.getLocation());
