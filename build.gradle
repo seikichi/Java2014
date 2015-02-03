@@ -99,11 +99,11 @@ project(':Interpret') {
 
   mainClassName = 'Interpret'
   archivesBaseName = 'Interpret'
-  version = '1.0'
+  version = '1.0.1'
 
   jar {
     manifest {
-      attributes 'Manifest-Version' : '1.0'
+      attributes 'Manifest-Version' : '1.0.1'
       attributes 'Main-Class' : 'Interpret'
       attributes 'Implementation-Version' : version
     }

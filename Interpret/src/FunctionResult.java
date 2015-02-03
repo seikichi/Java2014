@@ -31,17 +31,11 @@ class MethodResult implements FunctionResult {
     method.setAccessible(true);
     try {
       return method.invoke(receiver, args);
-    } catch (IllegalArgumentException | IllegalAccessException e) {
-      JOptionPane.showMessageDialog(null,
-                                    e.toString(),
-                                    "Exception",
-                                    JOptionPane.ERROR_MESSAGE);
     } catch (InvocationTargetException _e) {
       Throwable e = _e.getTargetException();
-      JOptionPane.showMessageDialog(null,
-                                    e.toString(),
-                                    "Exception",
-                                    JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, e.toString(), "Exception", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, e.toString(), "Exception", JOptionPane.ERROR_MESSAGE);
     }
     return null;
   }
@@ -63,17 +57,11 @@ class ConstructorResult implements FunctionResult {
   public Object invoke(Object ...args) {
     try {
       return ctor.newInstance(args);
-    } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
-      JOptionPane.showMessageDialog(null,
-                                    e.toString(),
-                                    "Exception",
-                                    JOptionPane.ERROR_MESSAGE);
     } catch (InvocationTargetException _e) {
       Throwable e = _e.getTargetException();
-      JOptionPane.showMessageDialog(null,
-                                    e.toString(),
-                                    "Exception",
-                                    JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, e.toString(), "Exception", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, e.toString(), "Exception", JOptionPane.ERROR_MESSAGE);
     }
     return null;
   }
