@@ -15,32 +15,35 @@ import org.junit.experimental.theories.*;
 @RunWith(Theories.class)
 public class GrepTest {
   static final class Data {
-    public final String input;
-    public final String word;
-    public final String output;
-    Data(String input, String word, String output) {
-      this.input = input;
+    public String input;
+    public String word;
+    public String output;
+    Data(String[] input, String word, String[] output) {
+      this.input = "";
+      for (String s : input) {
+        this.input = this.input + String.format("%s%n", s);
+      }
       this.word = word;
-      this.output = output;
+      this.output = "";
+      for (String s : output) {
+        this.output = this.output + String.format("%s%n", s);
+      }
     }
   }
 
   @DataPoints
   public static Data[] data = {
-    new Data("", "word", ""),
-    new Data("ab\n" +
-             "bc\n" +
-             "ca",
-             "a",
-             "1: ab\n" +
-             "3: ca\n"),
-    new Data("aaaaa\n" +
-             "bbbbb\n" +
-             "cccccaaaaa\n" +
-             "ddddd\n",
-             "aaa",
-             "1: aaaaa\n" +
-             "3: cccccaaaaa\n"),
+    new Data(new String[]{}, "word", new String[]{}),
+    new Data(new String[]{"!word!"}, "word",
+             new String[]{"1: !word!"}),
+    new Data(new String[]{"word", "wordword", "wordwordword"}, "word",
+             new String[]{
+               "1: word",
+               "2: wordword",
+               "3: wordwordword",
+             }),
+    new Data(new String[]{"ab", "bc", "ca"}, "a",
+             new String[]{"1: ab", "3: ca"}),
   };
 
   @Theory
