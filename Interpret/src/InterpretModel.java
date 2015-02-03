@@ -51,8 +51,11 @@ public final class InterpretModel extends Observable {
     Class<?> klass = null;
     try {
       klass = Class.forName(name);
-    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
-      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      JOptionPane.showMessageDialog(null,
+                                    e.toString(),
+                                    "Exception",
+                                    JOptionPane.ERROR_MESSAGE);
     }
     if (klass == null || klassList.contains(klass)) { return; }
     klassList.add(klass);

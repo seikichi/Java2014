@@ -221,8 +221,11 @@ class FieldTreeNodeUserObject implements TreeNodeUserObject {
     Object value = null;
     try {
       value = this.field.get(this.receiver);
-    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
-      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      JOptionPane.showMessageDialog(null,
+                                    e.toString(),
+                                    "Exception",
+                                    JOptionPane.ERROR_MESSAGE);
     }
     return TreeNodeUserObjectUtil.getChildren(value);
   }

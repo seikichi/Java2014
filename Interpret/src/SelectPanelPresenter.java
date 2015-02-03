@@ -1,3 +1,4 @@
+import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.Window;
 import javax.swing.BoxLayout;
@@ -33,24 +34,28 @@ class SelectPanelPresenter {
   public Object get() {
     String text = textField.getText();
     Object item = box.getSelectedItem();
-    if (item.equals(Object.class)) {
-      return explored;
-    } else if (item.equals(boolean.class)) {
-      return Boolean.valueOf(text);
-    } else if (item.equals(byte.class)) {
-      return Byte.valueOf(text);
-    } else if (item.equals(short.class)) {
-      return Short.valueOf(text);
-    } else if (item.equals(int.class)) {
-      return Integer.valueOf(text);
-    } else if (item.equals(long.class)) {
-      return Long.valueOf(text);
-    } else if (item.equals(float.class)) {
-      return Float.valueOf(text);
-    } else if (item.equals(double.class)) {
-      return Double.valueOf(text);
-    } else if (item.equals(char.class)) {
-      return text.charAt(0);
+    try {
+      if (item.equals(Object.class)) {
+        return explored;
+      } else if (item.equals(boolean.class)) {
+        return Boolean.valueOf(text);
+      } else if (item.equals(byte.class)) {
+        return Byte.valueOf(text);
+      } else if (item.equals(short.class)) {
+        return Short.valueOf(text);
+      } else if (item.equals(int.class)) {
+        return Integer.valueOf(text);
+      } else if (item.equals(long.class)) {
+        return Long.valueOf(text);
+      } else if (item.equals(float.class)) {
+        return Float.valueOf(text);
+      } else if (item.equals(double.class)) {
+        return Double.valueOf(text);
+      } else if (item.equals(char.class)) {
+        return text.charAt(0);
+      }
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, e.toString(), "Exception", JOptionPane.ERROR_MESSAGE);
     }
     return text;
   }

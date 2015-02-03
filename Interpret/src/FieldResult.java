@@ -33,7 +33,11 @@ class ArrayFieldResult implements FieldResult {
   }
 
   @Override public void set(Object object) {
-    Array.set(array, index, object);
+    try {
+      Array.set(array, index, object);
+    } catch (IllegalArgumentException e) {
+      JOptionPane.showMessageDialog(null, e.toString(), "Exception", JOptionPane.ERROR_MESSAGE);
+    }
   }
 }
 
@@ -64,8 +68,8 @@ class NormalFieldResult implements FieldResult {
   @Override public Object get() {
     try {
       return field.get(receiver);
-    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
-      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      JOptionPane.showMessageDialog(null, e.toString(), "Exception", JOptionPane.ERROR_MESSAGE);
     }
     return null;
   }
@@ -77,8 +81,8 @@ class NormalFieldResult implements FieldResult {
       modifiersField.setAccessible(true);
       modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
       field.set(receiver, object);
-    } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
-      e.printStackTrace();
+    } catch (IllegalAccessException | NoSuchFieldException e) {
+      JOptionPane.showMessageDialog(null, e.toString(), "Exception", JOptionPane.ERROR_MESSAGE);
     }
   }
 }
