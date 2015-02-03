@@ -1,4 +1,5 @@
-// package ch16.ex16_11;
+package ch16.ex16_11;
 
-// public class Player {
-// }
+public class Player {
+  public void play(Game game) {}
+}
