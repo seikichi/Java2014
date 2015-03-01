@@ -1,7 +1,7 @@
-buildscript {
-  repositories { jcenter() }
-  dependencies { classpath 'com.bluepapa32:gradle-watch-plugin:0.1.4' }
-}
+// buildscript {
+//   repositories { jcenter() }
+//   dependencies { classpath 'com.bluepapa32:gradle-watch-plugin:0.1.4' }
+// }
 
 subprojects {
   gradle.projectsEvaluated {
@@ -14,7 +14,7 @@ subprojects {
 project(':JPL') {
   defaultTasks 'test'
   apply plugin: 'java'
-  apply plugin: 'com.bluepapa32.watch'
+  // apply plugin: 'com.bluepapa32.watch'
 
   dependencies {
     testCompile files('../lib/junit-4.11.jar')
@@ -26,12 +26,12 @@ project(':JPL') {
     test { java { srcDirs = ['.']; include '**/*Test.java'; include '**/Test*.java'; } }
   }
 
-  watch {
-    java {
-      files fileTree(dir: '.', include: '**/*.java')
-      tasks 'test'
-    }
-  }
+  // watch {
+  //   java {
+  //     files fileTree(dir: '.', include: '**/*.java')
+  //     tasks 'test'
+  //   }
+  // }
 }
 
 project(':GUI:1_3') {
