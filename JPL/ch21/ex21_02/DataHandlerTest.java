@@ -8,15 +8,15 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
 
 public class DataHandlerTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
-    private File file;
+    private File file, otherFile;
 
     @Before
     public void setup() throws Exception {
@@ -24,6 +24,11 @@ public class DataHandlerTest {
         PrintWriter writer = new PrintWriter(new FileWriter(file, true));
         writer.println("Hello, world!");
         writer.close();
+
+        otherFile = folder.newFile("otherFile.txt");
+        PrintWriter otherWriter = new PrintWriter(new FileWriter(otherFile, true));
+        otherWriter.println("こんにちは世界");
+        otherWriter.close();
     }
 
     @Test
@@ -40,8 +45,20 @@ public class DataHandlerTest {
         byte[] first = handler.readFile(file);
         byte[] second = handler.readFile(file);
 
-        int firstHashCode = Arrays.hashCode(first);
-        int secondHashCode = Arrays.hashCode(second);
-        assertThat(firstHashCode, is(secondHashCode));
+        assertThat(first, is(sameInstance(second)));
+    }
+
+    @Test
+    public void 複数のファイル内容をキャッシュできること() throws Exception {
+        DataHandler handler = new DataHandler();
+
+        byte[] first = handler.readFile(file);
+        byte[] otherFirst = handler.readFile(otherFile);
+
+        byte[] second = handler.readFile(file);
+        byte[] otherSecond = handler.readFile(otherFile);
+
+        assertThat(first, is(sameInstance(second)));
+        assertThat(otherFirst, is(sameInstance(otherSecond)));
     }
 }
