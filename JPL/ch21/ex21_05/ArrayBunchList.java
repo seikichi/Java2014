@@ -1,7 +1,5 @@
 package ch21.ex21_05;
 
-import com.sun.istack.internal.NotNull;
-
 import java.util.AbstractList;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
