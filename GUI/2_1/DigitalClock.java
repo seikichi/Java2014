@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public final class DigitalClock {
   private static final long serialVersionUID = 1L;
