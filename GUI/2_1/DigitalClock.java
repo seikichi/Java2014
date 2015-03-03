@@ -1,59 +1,50 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
-public final class DigitalClock extends Frame implements Runnable {
+public final class DigitalClock {
   private static final long serialVersionUID = 1L;
 
-  private static int Width = 600;
-  private static int Height = 128;
-  private static int FontSize = 48;
-  private static int FontX = 32;
-  private static int FontY = 96;
-  private static String timeFormat = "yyyy/MM/dd HH:mm:ss";
+  private static final int Width = 600;
+  private static final int Height = 96;
+  private static final int FontSize = 48;
+  private static final int FontX = 32;
+  private static final int FontY = 48;
+  private static final String timeFormat = "yyyy/MM/dd HH:mm:ss";
 
   public DigitalClock() {
-    setResizable(false);
-    setSize(Width, Height);
-    setTitle("Digital Clock");
-    setVisible(true);
-    setFont(new Font(Font.DIALOG, Font.BOLD, FontSize));
-    addWindowListener(new WindowAdapter() {
-        @Override public void windowClosing(WindowEvent event) {
-          System.exit(0);
-        }
-    });
-  }
+      JFrame frame = new JFrame();
 
-  @Override public final void paint(final Graphics g) {
-    final Graphics2D canvas = (Graphics2D) g;
-    final GregorianCalendar calender = new GregorianCalendar();
-    final SimpleDateFormat formatter = new SimpleDateFormat(timeFormat);
-    canvas.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                            RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    canvas.setColor(Color.BLACK);
-    canvas.drawString(formatter.format(calender.getTime()), FontX, FontY);
-  }
+      frame.setTitle("Digital Clock!");
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setSize(Width, Height);
+      frame.setResizable(false);
+      frame.setVisible(true);
+      new Timer(1000, (ActionEvent) -> frame.repaint()).start();
 
-  @Override public final void run() {
-    while (true) {
-      repaint();
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e){
-        break;
-      }
-    }
+      frame.getContentPane().add(new JPanel() {
+          {
+              setFont(new Font(Font.DIALOG, Font.BOLD, FontSize));
+          }
+
+          @Override
+          public  void paintComponent(Graphics g) {
+              super.paintComponent(g);
+
+              Graphics2D canvas = (Graphics2D) g;
+              GregorianCalendar calender = new GregorianCalendar();
+              SimpleDateFormat formatter = new SimpleDateFormat(timeFormat);
+              canvas.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+              canvas.setColor(Color.BLACK);
+              canvas.drawString(formatter.format(calender.getTime()), FontX, FontY);              
+          }
+      });
   }
 
   public static void main(String[] args) {
-    new Thread(new DigitalClock()).start();
+    new DigitalClock();
   }
 }
