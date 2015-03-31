@@ -2,6 +2,8 @@ package ch22.ex22_12;
 
 import java.io.Reader;
 import java.util.*;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
 
 public final class AttributedImpl<E> implements Attributed<E> {
     HashMap<String, Attr<E>> attrTable = new HashMap<>();
@@ -22,7 +24,17 @@ public final class AttributedImpl<E> implements Attributed<E> {
         return attrTable.values().iterator();
     }
 
-    public static Attributed readAttrs(Reader sourcxe) {
-        return null;
+    public static Attributed<Object> readAttrs(Reader source) {
+        Scanner in = new Scanner(source);
+        AttributedImpl<Object> attrs = new AttributedImpl<>();
+
+        Pattern pat = Pattern.compile("^(.+)=(.+)$", Pattern.MULTILINE);
+        while (in.hasNext()) {
+            in.findInLine(pat);
+            MatchResult m = in.match();
+            attrs.add(new Attr(m.group(1), m.group(2)));
+            in.nextLine();
+        }
+        return attrs;
     }
 }
