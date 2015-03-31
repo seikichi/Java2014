@@ -100,6 +100,28 @@ project(':GUI:2_1') {
   }
 }
 
+project(':GUI:2_2') {
+  apply plugin: 'java'
+  apply plugin: 'application'
+
+  sourceSets {
+    main { java { srcDirs = ['.']; exclude '**/*Test.java' } }
+    test { java { srcDirs = ['.']; include '**/*Test.java' } }
+  }
+  mainClassName = 'DigitalClock'
+  archivesBaseName = 'DigitalClock'
+  version = '0.4'
+
+  jar {
+    manifest {
+      attributes 'Manifest-Version' : '1.0'
+      attributes 'Main-Class' : 'DigitalClock'
+      attributes 'Implementation-Version' : version
+    }
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}
+
 project(':Interpret') {
   apply plugin: 'java'
   apply plugin: 'application'
