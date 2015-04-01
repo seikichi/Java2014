@@ -99,14 +99,6 @@ public final class DigitalClock {
         menubar.add(fileMenu);
         frame.setJMenuBar(menubar);
 
-        updateSize(null);
-        frame.setTitle("Digital Clock!");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setVisible(true);
-
-        new Timer(1000, (ActionEvent) -> frame.repaint()).start();
-
         frame.getContentPane().add(new JPanel() {
             @Override
             public void paintComponent(Graphics g) {
@@ -130,7 +122,15 @@ public final class DigitalClock {
                 Insets insets = frame.getInsets();
                 canvas.drawString(formatter.format(calender.getTime()), FontX + insets.left, FontY + insets.top);
             }
-          }, BorderLayout.CENTER);
+        }, BorderLayout.CENTER);
+
+        updateSize(null);
+        frame.setTitle("Digital Clock!");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+
+        new Timer(1000, (ActionEvent) -> frame.repaint()).start();
     }
 
     private class Dialog {
