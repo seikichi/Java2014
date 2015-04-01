@@ -128,10 +128,9 @@ public final class DigitalClock {
                 int frameHeight = frame.getHeight();
 
                 Insets insets = frame.getInsets();
-                canvas.drawString(formatter.format(calender.getTime()),
-                        FontX + insets.left, FontY + insets.top + clockHeight / 2);
+                canvas.drawString(formatter.format(calender.getTime()), FontX + insets.left, FontY + insets.top);
             }
-        });
+          }, BorderLayout.CENTER);
     }
 
     private class Dialog {
@@ -140,13 +139,9 @@ public final class DigitalClock {
 
         Dialog(Frame owner) {
             dialog = new JDialog(owner);
-            dialog.setTitle("Properties");
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setSize(256, 256);
-            dialog.setResizable(false);
-            dialog.setVisible(true);
 
             panel = new JPanel();
+            panel.setVisible(true);
             panel.setLayout(new GridLayout(8, 1));
 
             initFont();
@@ -155,6 +150,12 @@ public final class DigitalClock {
             initBackgroundColor();
 
             dialog.getContentPane().add(panel, BorderLayout.CENTER);
+            dialog.setTitle("Properties");
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setSize(256, 256);
+            dialog.setResizable(false);
+            dialog.setVisible(true);
+            dialog.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));
         }
 
         private final Map<String, Color> colors = new HashMap<String, Color>() {{
