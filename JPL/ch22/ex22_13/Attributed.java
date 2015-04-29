@@ -1,4 +1,4 @@
-package ch22.ex22_12;
+package ch22.ex22_13;
 
 public interface Attributed {
     void add(Attr newAttr);
